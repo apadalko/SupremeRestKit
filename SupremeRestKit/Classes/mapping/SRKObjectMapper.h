@@ -74,3 +74,4 @@
 +(void)processDataInBackground:(NSDictionary*)data withScope:(SRKMappingScope*)scope forMapping:(id)maping complitBlock:(void(^)(NSArray * result))complitBlock;
 
 @end
+

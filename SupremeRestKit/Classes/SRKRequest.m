@@ -7,6 +7,8 @@
 //
 
 #import "SRKRequest.h"
+
+#import "SRKRequest_Private.h"
 @interface SRKRequest ()
 
 @property (nonatomic,retain)NSMutableArray * _multiparts;
@@ -15,33 +17,33 @@
 @end
 @implementation SRKRequest
 
-+(instancetype)GETRequest:(NSString *)url params:(id)params mapping:(id)mapping andResponseBlock:(void (^)(SRKResponse *))responseBlock{
-    return [[self alloc] initWithMethod:SRKRequestMethodGET url:url params:params mapping:mapping responseBlock:responseBlock
++(instancetype)GETRequest:(NSString *)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void (^)(SRKResponse *))responseBlock{
+    return [[self alloc] initWithMethod:SRKRequestMethodGET url:url urlParams:urlParams mapping:mapping responseBlock:responseBlock
             ];
 }
 
-+(instancetype)POSTRequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
-    return [[self alloc] initWithMethod:SRKRequestMethodPOST url:url params:params mapping:mapping responseBlock:responseBlock
++(instancetype)POSTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
+    return [[self alloc] initWithMethod:SRKRequestMethodPOST url:url urlParams:urlParams mapping:mapping responseBlock:responseBlock
             ];
     
 }
-+(instancetype)DELETERequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
-    return [[self alloc] initWithMethod:SRKRequestMethodDELETE url:url params:params mapping:mapping responseBlock:responseBlock
++(instancetype)DELETERequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
+    return [[self alloc] initWithMethod:SRKRequestMethodDELETE url:url urlParams:urlParams mapping:mapping responseBlock:responseBlock
             ];
     
 }
-+(instancetype)PUTRequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
-    return [[self alloc] initWithMethod:SRKRequestMethodPUT url:url params:params mapping:mapping responseBlock:responseBlock
++(instancetype)PUTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock{
+    return [[self alloc] initWithMethod:SRKRequestMethodPUT url:url urlParams:urlParams mapping:mapping responseBlock:responseBlock
             ];
 }
 
--(instancetype)initWithMethod:(SRKRequestMethod)method url:(NSString *)url params:(id)params mapping:(id)mapping responseBlock:(void (^)(SRKResponse *))responseBlock{
+-(instancetype)initWithMethod:(SRKRequestMethod)method url:(NSString *)url urlParams:(id)urlParams mapping:(id)mapping responseBlock:(void (^)(SRKResponse *))responseBlock{
     
     if (self=[super init]) {
         self.responseBlock=responseBlock;
         self.method=method;
         self.urlPath=url;
-        self.params=params;
+        self.urlParams=urlParams;
         self.mapping=mapping;
     }
     return self;
@@ -73,6 +75,48 @@
     
     return self;
 }
+
+
+
+
+#pragma mark - private
+
+-(NSString*)HTTPMethod{
+    switch (self.method) {
+        case SRKRequestMethodGET:
+            return  @"GET";;
+            break;
+        case SRKRequestMethodPOST:
+            return  @"POST";
+            break;
+            
+        case SRKRequestMethodPUT:
+            return  @"PUT";
+            break;
+            
+        case SRKRequestMethodDELETE:
+            return  @"DELETE";
+            break;
+            
+        case SRKRequestMethodPATCH:
+            return @"PATCH";
+            
+        default:
+            return @"GET";
+            break;
+    }
+}
+
+-(NSMutableURLRequest *)generateRequestWithSerialized:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error{
+    
+     NSString * k =  AFQueryStringFromParameters(self.urlParams);
+    
+    
+    return nil;
+}
+
+
+#pragma mark - lazy init
 -(NSArray *)multiparts{
     return __multiparts;
 }

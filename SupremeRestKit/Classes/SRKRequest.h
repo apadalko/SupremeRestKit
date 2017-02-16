@@ -16,32 +16,27 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
     SRKRequestMethodPOST,
     SRKRequestMethodPUT,
     SRKRequestMethodDELETE,
+    SRKRequestMethodPATCH,
     
 };
 @interface SRKRequest : NSObject
 
 
-+(instancetype)GETRequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-+(instancetype)POSTRequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-+(instancetype)DELETERequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
 
-+(instancetype)PUTRequest:(NSString*)url params:(id)params mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-
-
-
--(instancetype)initWithMethod:(SRKRequestMethod)method url:(NSString*)url  params:(id)params  mapping:(id)mapping responseBlock:(void(^)(SRKResponse  * response))responseBlock;
++(instancetype)GETRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
++(instancetype)POSTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
++(instancetype)DELETERequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
++(instancetype)PUTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
 
 
-@property (nonatomic,retain)NSMutableDictionary * body;
-@property (nonatomic,retain)id params;
-@property (nonatomic,retain)NSString * urlPath;
-@property (nonatomic)SRKRequestMethod method;
-@property (nonatomic,retain)id mapping; // could be string or dictionary or mapping itself
+
+-(instancetype)initWithMethod:(SRKRequestMethod)method urlParams:(NSString*)urlParams  params:(id)params  mapping:(id)mapping responseBlock:(void(^)(SRKResponse  * response))responseBlock;
+
+
+
 
 -(instancetype)addBodyParam:(NSString *)key value:(id)value;
-
-
--(instancetype)addBodyFromDict:(NSDictionary *)dict;
+-(instancetype)setBodyFromDictionary:(NSDictionary *)dict;
 
 
 @property (nonatomic,copy)SRKResponseBlock responseBlock;

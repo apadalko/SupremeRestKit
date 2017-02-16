@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <AFNetworking/AFNetworking.h>
+
 #import "SRKRequest.h"
 #import "SRKMappingScope.h"
 #import "SRKObjectMapper.h"
@@ -16,10 +16,13 @@
 
 typedef NSError  * _Nullable (^SRKErrorProccessingBlock) (NSError * _Nonnull error,NSURLSessionTask * _Nonnull task);
 
-@interface SRKClient : AFHTTPSessionManager
+@interface SRKClient : NSObject
+
+-(instancetype)initWithBaseURL:(NSURL *)url;
+-(instancetype)initWithBaseURL:(NSURL *)url andScope:(SRKMappingScope*)scope;
 
 -(void)makeRequest:(SRKRequest * _Nonnull)request;
--(void)regsiterMappingScope:(SRKMappingScope * _Nonnull)mappingScope;
+-(void)setMappingScope:(SRKMappingScope * _Nonnull)mappingScope;
 
 @property (nonnull,retain,nonatomic)SRKObjectMapper * objectMapper;
 @property (nonatomic,copy)_Nullable SRKErrorProccessingBlock errorProcessingBLock;
