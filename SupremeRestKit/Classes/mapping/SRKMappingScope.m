@@ -30,10 +30,22 @@ NSString *const kSRKPermanent = @"~permanent";
 
 @end
 @implementation SRKMappingScope
--(instancetype)initWithFile:(NSString*)filepath{
+
+static SRKMappingScope * _defaultScope;
++(instancetype)defaultScope{
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _defaultScope = [[SRKMappingScope alloc] init];
+    });
+    
+    return _defaultScope;
+}
+
+-(instancetype)initWithFile:(NSString*)fileName{
     
     
-    NSData * d = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[filepath stringByReplacingOccurrencesOfString:@".json" withString:@""] ofType:@"json"]];
+    NSData * d = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[fileName stringByReplacingOccurrencesOfString:@".json" withString:@""] ofType:@"json"]];
     NSDictionary * dict =   [NSJSONSerialization JSONObjectWithData:d options:0 error:nil];
     return [self initWithDictionary:dict];
 }
@@ -47,6 +59,19 @@ NSString *const kSRKPermanent = @"~permanent";
 -(instancetype)init{
     return  [self initWithDictionary:@{}];
 }
+
+
+-(void)setDataDictionary:(NSDictionary*)data{
+    self.mappingData=[[NSMutableDictionary alloc] initWithDictionary:data];
+    self.processedMappings = [[NSMutableDictionary alloc] init];
+}
+-(void)setDataFromFile:(NSString*)fileName{
+    NSData * d = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[fileName stringByReplacingOccurrencesOfString:@".json" withString:@""] ofType:@"json"]];
+    NSDictionary * dict =   [NSJSONSerialization JSONObjectWithData:d options:0 error:nil];
+    [self setDataDictionary:dict];
+}
+
+
 -(NSArray<SRKObjectMapping*>*)getObjectMappings:(id)mapping{
     
     

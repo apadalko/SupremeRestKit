@@ -15,6 +15,26 @@
 
 @end
 @implementation SRKObjectMapper
+
+static dispatch_queue_t _workQueueForStatic;
+
++(dispatch_queue_t)workQueueForStatic{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _workQueueForStatic=dispatch_queue_create("com.ap.SRKObjectMapper_STATIC", 0);
+    });
+    return _workQueueForStatic;
+}
+
+
+
+-(instancetype)init{
+    if (self=[super init]) {
+        self.scope=[SRKMappingScope defaultScope];
+    }
+    return self;
+}
+
 -(instancetype)initWithScope:(SRKMappingScope *)scope{
     if(self=[super init]){
         self.scope=scope;
@@ -27,16 +47,35 @@
     }
     return _workQueue;
 }
--(void)processData:(NSDictionary *)data forMapping:(id)_maping complitBlock:(void (^)(NSArray *))complitBlock{
+
+
+
+
+-(void)processDataInBackground:(NSDictionary *)data forMapping:(id)_maping complitBlock:(void (^)(NSArray *))complitBlock{
+    [SRKObjectMapper _processDataInBackground:data withScope:self.scope forMapping:_maping complitBlock:complitBlock inQueue:self.workQueue];
+}
+
+
+
+
++(void)processDataInBackground:(NSDictionary *)data forMapping:(id)maping complitBlock:(void (^)(NSArray *))complitBlock{
+    [self _processDataInBackground:data withScope:[SRKMappingScope defaultScope] forMapping:maping complitBlock:complitBlock inQueue:[self workQueueForStatic]];
+}
++(void)processDataInBackground:(NSDictionary *)data withScope:(SRKMappingScope *)scope forMapping:(id)maping complitBlock:(void (^)(NSArray *))complitBlock{
+    [self _processDataInBackground:data withScope:scope forMapping:maping complitBlock:complitBlock inQueue:[self workQueueForStatic]];
+}
+
+#pragma mark - private mapping
+
++(void)_processDataInBackground:(NSDictionary *)data withScope:(SRKMappingScope*)scope forMapping:(id)_maping complitBlock:(void (^)(NSArray *))complitBlock inQueue:(dispatch_queue_t)queue{
     
-    
-    NSArray * objectMappings = [[self scope] getObjectMappings:_maping];
+    NSArray * objectMappings = [scope getObjectMappings:_maping];
     
     if (!objectMappings && [_maping isKindOfClass:[SRKObjectMapping class]]) {
         objectMappings = @[_maping];
     }
     
-    dispatch_async(self.workQueue, ^{
+    dispatch_async(queue, ^{
         NSMutableArray * itemsResult = [[NSMutableArray alloc] init];
         for (SRKObjectMapping * mapping in objectMappings) {
             
@@ -73,11 +112,14 @@
     });
     
 }
--(DSObject*)_processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping {
+
+
+
++(DSObject*)_processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping {
     return [self __processData:data forMapping:mapping fetched:YES];
     
 }
--(DSObject*)__processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping fetched:(BOOL)fetched{
++(DSObject*)__processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping fetched:(BOOL)fetched{
     
     ///process rel mapping
     NSString * clName = [mapping className];
@@ -144,7 +186,7 @@
     
 }
 
--(void)proccessRelation:(id)relation forKey:(NSString*)key inObject:(DSObject*)obj withData:(NSDictionary*)data fetched:(BOOL)fetched{
++(void)proccessRelation:(id)relation forKey:(NSString*)key inObject:(DSObject*)obj withData:(NSDictionary*)data fetched:(BOOL)fetched{
     
     NSArray * p = [key componentsSeparatedByString:@"->"];
     if (p.count!=2) {
@@ -206,7 +248,7 @@
 
 #pragma mark - s
 
--(BOOL)ppj_proccessBoolStatement:(NSString*)_statement withData:(NSDictionary*)data{
++(BOOL)ppj_proccessBoolStatement:(NSString*)_statement withData:(NSDictionary*)data{
     
     NSArray * orParts = [_statement componentsSeparatedByString:@"||"];
     BOOL finalResult= YES;
