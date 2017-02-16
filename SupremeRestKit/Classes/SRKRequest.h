@@ -13,6 +13,7 @@ typedef void (^SRKResponseBlock) (SRKResponse  * response);
 typedef NS_ENUM(NSInteger,SRKRequestMethod){
     
     SRKRequestMethodGET,
+    SRKRequestMethodHEAD,
     SRKRequestMethodPOST,
     SRKRequestMethodPUT,
     SRKRequestMethodDELETE,

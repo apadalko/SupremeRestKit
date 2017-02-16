@@ -81,6 +81,11 @@
 
 #pragma mark - private
 
+-(BOOL)allowBodyOrMultipart{
+    
+    return self.method>SRKRequestMethodHEAD;
+}
+
 -(NSString*)HTTPMethod{
     switch (self.method) {
         case SRKRequestMethodGET:
@@ -100,7 +105,8 @@
             
         case SRKRequestMethodPATCH:
             return @"PATCH";
-            
+        case SRKRequestMethodHEAD:
+            return "HEAD";
         default:
             return @"GET";
             break;
@@ -109,10 +115,21 @@
 
 -(NSMutableURLRequest *)generateRequestWithSerialized:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error{
     
-     NSString * k =  AFQueryStringFromParameters(self.urlParams);
+    NSString * k =  AFQueryStringFromParameters(self.urlParams);
+    
+    if (self.multiparts.count>0&&[self allowBodyOrMultipart]) {
+       return [serializer multipartFormRequestWithMethod:[self HTTPMethod] URLString:@"" parameters:self.body constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+           for (SRKMultipart * p in self.multiparts) {
+               [formData appendPartWithFileData:[p data] name:[p name] fileName:[p fileName] mimeType:[p mimeType]];
+           }
+        } error:error];
+        
+    }else{
+        return   [serializer requestWithMethod:[self HTTPMethod] URLString:@"" parameters:[self allowBodyOrMultipart]?self.body:nil error:error];
+    }
     
     
-    return nil;
+    
 }
 
 
