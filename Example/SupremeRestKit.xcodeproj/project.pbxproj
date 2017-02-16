@@ -24,7 +24,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		7984B5ABEEBEDEACA1F2F751 /* Pods_SupremeRestKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE79966EEBB6CCCA60AD033 /* Pods_SupremeRestKit_Tests.framework */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		B8E43A361E55213200C4CF01 /* gm_v2_mapping.json in Resources */ = {isa = PBXBuildFile; fileRef = B8E43A351E55213200C4CF01 /* gm_v2_mapping.json */; };
+		B8E43A391E5562A700C4CF01 /* gm_v2_mapping.json in Resources */ = {isa = PBXBuildFile; fileRef = B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +64,7 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		99FA5DD51D12EC5E1A5EFDAB /* Pods-SupremeRestKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Example/Pods-SupremeRestKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B0F7D047A1BA76C382E2CD93 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		B8E43A351E55213200C4CF01 /* gm_v2_mapping.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gm_v2_mapping.json; sourceTree = "<group>"; };
+		B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gm_v2_mapping.json; sourceTree = "<group>"; };
 		DF476058AB1753B519DBAF01 /* Pods-SupremeRestKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Tests/Pods-SupremeRestKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ED003360E9AD9348A9F6B597 /* Pods-SupremeRestKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Example/Pods-SupremeRestKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F3E9CD72D93FE922E58AC0B3 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -134,12 +134,12 @@
 		6003F593195388D20070C39A /* Example for SupremeRestKit */ = {
 			isa = PBXGroup;
 			children = (
+				B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */,
 				6003F59C195388D20070C39A /* SRKAppDelegate.h */,
 				6003F59D195388D20070C39A /* SRKAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* SRKViewController.h */,
 				6003F5A6195388D20070C39A /* SRKViewController.m */,
-				B8E43A351E55213200C4CF01 /* gm_v2_mapping.json */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -284,7 +284,7 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
-				B8E43A361E55213200C4CF01 /* gm_v2_mapping.json in Resources */,
+				B8E43A391E5562A700C4CF01 /* gm_v2_mapping.json in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);

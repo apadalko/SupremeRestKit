@@ -222,13 +222,13 @@
  add a new realtion to mapping
  
  @param fromKey           key in given data, can be nil
- @param toKey             name of property in resulting object
- @param relationMapping   mapping of this nested object
- 
+ @param toKey             name of property in resulting object , relations will be stored by this key (name of property in resulting object)
+ @param relationMapping   mapping of this nested object (`SRKObjectMapping`)
+ @note relation are saved by toKey - name of property in resulting object
  @return current Mapping Object.
  
  */
--(instancetype)addRelation:(NSString*)fromKey rightKey:(NSString*)toKey relationMapping:(id)relationMapping;
+-(instancetype)addRelation:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping;
 
 /**
  add a new realtion to mapping
@@ -236,6 +236,7 @@
  @param relation   relation object `SRKMappingRelation`
  
  @return current Mapping Object.
+ @note relation are saved by toKey - name of property in resulting object
  */
 -(instancetype)addRelation:(SRKMappingRelation*)relation;
 /**

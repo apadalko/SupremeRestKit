@@ -5,13 +5,13 @@
 //  Created by Alex Padalko on 2/15/17.
 //
 //
-
+#import "SRKObjectMapping.h"
 @interface SRKObjectMapping ()
 /**
- relations list of mapping
+ relations dictionary of mapping , saved by toKey (name of property in resulting object)
  @note if you use extend - it will use the relations of 'Super' Mapping
  */
-@property (nonatomic,retain)NSMutableArray<SRKMappingRelation *> * relations;
+@property (nonatomic,retain)NSMutableDictionary * relations;
 /**
  properties list of mapping
  @note if you use extend - it will use the relations of 'Super' Mapping
@@ -23,4 +23,7 @@
  list of permanent (static) properties
  */
 @property (nonatomic,retain)NSMutableDictionary * permanent;
+
+
+-(NSDictionary*)dictionaryRepresentation;
 @end

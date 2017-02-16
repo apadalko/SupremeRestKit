@@ -8,6 +8,19 @@
 
 #import "SRKMappingScope.h"
 #import "SRKObjectMapping_Private.h"
+#import "SRKMappingRelation_Private.h"
+
+
+NSString *const kSRKClassName = @"~className";
+NSString *const kSRKKeyPath = @"~keyPath";
+NSString *const kSRKExtend = @"~extends";
+NSString *const kSRKStorageName = @"~storage";
+NSString *const kSRKIndifiterKeyPath = @"~infifiter";
+NSString *const kSRKRelations = @"~relations";
+NSString *const kSRKProperties = @"~properties";
+NSString *const kSRKPermanent = @"~permanent";
+
+
 @interface SRKMappingScope ()
 
 @property (nonatomic,retain)NSMutableDictionary * mappingData;
@@ -18,8 +31,9 @@
 @end
 @implementation SRKMappingScope
 -(instancetype)initWithFile:(NSString*)filepath{
-    ;
-    NSData * d = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:filepath ofType:@"json"]];
+    
+    
+    NSData * d = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[filepath stringByReplacingOccurrencesOfString:@".json" withString:@""] ofType:@"json"]];
     NSDictionary * dict =   [NSJSONSerialization JSONObjectWithData:d options:0 error:nil];
     return [self initWithDictionary:dict];
 }
@@ -30,7 +44,9 @@
     }
     return self;
 }
-
+-(instancetype)init{
+    return  [self initWithDictionary:@{}];
+}
 -(NSArray<SRKObjectMapping*>*)getObjectMappings:(id)mapping{
     
     
@@ -56,7 +72,7 @@
     
 }
 
--(id)_getObjectMapping:(id)mapping{
+-(SRKObjectMapping*)_getObjectMapping:(id)mapping{
     
     
     if ([mapping isKindOfClass:[NSString class]]) {
@@ -66,6 +82,9 @@
         }else{
             id data = [self.mappingData valueForKey:mapping];
             SRKObjectMapping * objectMapping = [self _getObjectMapping:data];
+            if (objectMapping) {
+                [self.processedMappings setValue:objectMapping forKey:mapping];
+            }
             return objectMapping;
         }
     }else if ([mapping isKindOfClass:[NSDictionary class]]){
@@ -73,82 +92,143 @@
         return objectMapping;
     }else if ([mapping isKindOfClass:[SRKObjectMapping class]]){
         
-        //TODO
-        SRKObjectMapping * mappingObject = nil; // [self _getObjectMapping:[mapping mj_keyValues]];
+        SRKObjectMapping * mappingObject = mapping;
+        //so in this case we will generate dictionary representation of mapping and will  and will treat it like any other mapping which generated from dictionary
         
-        //        SRKObjectMapping * mappingObject = mapping;
-        //        NSMutableDictionary * processedRelations = [[NSMutableDictionary alloc] init];
-        //        for (NSString * key in [mappingObject relations]) {
-        //
-        //            SRKObjectMapping * subMapping = [self _getObjectMapping:[[mappingObject relations] valueForKey:key]];
-        //            [processedRelations setValue:subMapping forKey:key];
-        //        }
-        //        mappingObject.relations=processedRelations;
-        //
+        mappingObject = [self _generateMappingFromDictionary:[mappingObject dictionaryRepresentation]];
+
         return mappingObject;
     }else return nil;
 }
 
+//-(id)valueForUndefinedKey:(NSString *)key{
+//    
+//    if ([key isEqualToString:@"extends"]) {
+//        NSLog(@">>>");
+//    }
+//    
+//    return  nil;
+//}
+
+-(instancetype)addMapping:(SRKObjectMapping *)mapping forName:(NSString *)name{
+    [self.mappingData setValue:mapping forKey:name];
+}
 
 
--(SRKObjectMapping*)_generateMappingFromDictionary:(NSMutableDictionary*)dictionary{
-    NSString * className = [dictionary valueForKey:@"className"];
-    NSString * extends = [dictionary valueForKey:@"extends"];
-    NSDictionary * props = [dictionary valueForKey:@"properties"];
-    NSArray * relations = [dictionary valueForKey:@"relations"];
+-(SRKObjectMapping*)_generateMappingFromDictionary:(NSDictionary*)dictionary{
     
-    if (!className&&!extends&&!props&&!relations) {
+    //1 get all current data properties
+    NSString * className = [[dictionary valueForKey:kSRKClassName] copy];
+    NSString * extends = [[dictionary valueForKey:kSRKExtend] copy];
+    NSString * storageName = [[dictionary valueForKey:kSRKStorageName] copy];
+    NSString * keyPath = [[dictionary valueForKey:kSRKKeyPath] copy];
+    NSString * identifierKeyPath = [[dictionary valueForKey:kSRKIndifiterKeyPath] copy];
+    
+    NSDictionary * _permanent = [dictionary valueForKey:kSRKPermanent];
+    NSDictionary * _properties = [dictionary valueForKey:kSRKProperties];
+    NSDictionary * _relations = [dictionary valueForKey:kSRKRelations];
+    
+    if (!className&&!extends&&!identifierKeyPath&&!_properties&&!_relations) {
         
         return (SRKObjectMapping*)dictionary;
     }
-    
-    NSMutableDictionary * properties = [[NSMutableDictionary alloc] initWithDictionary:props];
-    
-    NSString * identifierKeyPath = [dictionary valueForKey:@"identifier"];
-    
-    NSMutableDictionary * processedRelations = [[NSMutableDictionary alloc] init];
-    
+    // creating copy of properties
+    NSMutableDictionary * properties = [[NSMutableDictionary alloc] initWithDictionary:_properties];
     if (!properties) {
         properties=[[NSMutableDictionary alloc] init];
     }
+    //generating empty dictionary for relations
+    NSMutableDictionary * processedRelations = [[NSMutableDictionary alloc] init];
+    //generating empty dictionary for permanent properties
+    NSMutableDictionary * permanentProperties = [[NSMutableDictionary alloc] init];
+
+    // if object extends other object we will load extended object properties,relations,and permanent values
     if (extends) {
-        SRKObjectMapping * subMapping = [self _getObjectMapping:[dictionary valueForKey:@"extends"]];
-        for (NSString* key in [subMapping properties]) {
-            [properties setValue:[[subMapping properties] valueForKey:key] forKey:key];
+        //loading object
+        SRKObjectMapping * extendedMapping = [self _getObjectMapping:extends];
+        if (extendedMapping){ // there is a chance that object doesnt exsits
+            //copy properties
+            [properties setValuesForKeysWithDictionary:[extendedMapping properties]];
+            //copy relations objects
+            [processedRelations setValuesForKeysWithDictionary:[extendedMapping relations]];
+            //copy permanent props
+            [permanentProperties setValuesForKeysWithDictionary:[extendedMapping permanent]];
+            
+            // replace other properties if they are nil
+            if (!className) {
+                className=[extendedMapping className];
+            }
+            if (!storageName) {
+                storageName = [extendedMapping storageName];
+            }
+            if (!keyPath) {
+                keyPath = [extendedMapping keyPath];
+            }
+            if (!identifierKeyPath) {
+                identifierKeyPath=[extendedMapping objectIdentifierKeyPath];
+            }
         }
-        for (NSString* key in [subMapping relations]) {
-            [processedRelations setValue:[[subMapping relations] valueForKey:key] forKey:key];
-        }
-        if (!className) {
-            className=[subMapping className];
-        }
-        if (!identifierKeyPath) {
-            identifierKeyPath=[subMapping objectIdentifierKeyPath];
-        }
+     
     }
     //process relations
     
     
     
-    for (NSString * key in relations) {
+    for (NSString * relationComplexKey in _relations) {
         
-        if ([key hasPrefix:@"?"]) {
-            
-            id subMappings  = [relations valueForKey:key];
-            NSMutableDictionary * statementMapping = [[NSMutableDictionary alloc] init];
-            for (NSString * k in subMappings) {
-                id subMapping = [self _getObjectMapping:[subMappings valueForKey:k]];
-                [statementMapping setValue:subMapping forKey:k];
+        
+        id data = [_relations valueForKey:relationComplexKey];
+        
+        if ([data isKindOfClass:[SRKMappingRelation class]]){
+            SRKMappingRelation * relation = data;
+            SRKObjectMapping * mapping = [self _getObjectMapping:relation.mapping];
+            if (mapping){
+                SRKMappingRelation * newRelation = [SRKMappingRelation realtionWithFromKey:relation.fromKey toKey:relation.toKey mapping:mapping];
+                newRelation.validationBlock = relation.validationBlock;
+                [processedRelations setValue:newRelation forKey:relation.toKey];
+
             }
-            [processedRelations setValue:statementMapping forKey:key];
+        }
+        else
+        if ([relationComplexKey hasPrefix:@"?"]) {
+            
+            NSMutableDictionary * statementMapping = [[NSMutableDictionary alloc] init];
+            id subRelations  = data;
+            for (NSString * subRelationComplexKey in subRelations) {
+                
+                SRKMappingRelation * relation = [SRKMappingRelation relationWithComplexKey:subRelationComplexKey];
+                if (relation) {
+                    SRKObjectMapping * subRelationMapping = [self _getObjectMapping:[subRelations valueForKey:subRelationComplexKey]];
+                    if (subRelationMapping) {
+                        relation.mapping = subRelationMapping;
+                        [statementMapping setValue:relation forKey:subRelationComplexKey];
+                    }
+                }
+                
+            }
+            [processedRelations setValue:statementMapping forKey:relationComplexKey];
             
         }else{
-            id subMapping = [self _getObjectMapping:[relations valueForKey:key]];
             
+            SRKMappingRelation * relation = [SRKMappingRelation relationWithComplexKey:relationComplexKey];
             
-            [processedRelations setValue:subMapping forKey:key];
+            if (relation) {
+                SRKObjectMapping *  relationMapping = [self _getObjectMapping:data];
+                if (relationMapping) {
+                    relation.mapping = relationMapping;
+                    [processedRelations setValue:relation forKey:relation.toKey];
+                }
+            }
+            
+          
         }
         
+    }
+    
+    // process current permanent properties
+    
+    for (NSString * key in _permanent) {
+        [permanentProperties setValue:[_permanent valueForKey:key] forKey:key];
     }
     
     
@@ -163,17 +243,21 @@
     
     
     mapping.className=className;
-    mapping.relations=processedRelations;
-    mapping.properties=properties;
-    //TODO
+    mapping.storageName = storageName;
+    mapping.objectIdentifierKeyPath = identifierKeyPath;
+    mapping.keyPath = keyPath;
     
-//    mapping.permanent=[dictionary valueForKey:@"permanent"];
-    mapping.keyPath=[dictionary valueForKey:@"keyPath"];
-    mapping.objectIdentifierKeyPath=identifierKeyPath;
     
+    mapping.permanent = permanentProperties;
+    mapping.relations = processedRelations;
+    mapping.properties = properties;
     
     
     return mapping;
     
 }
+
+
+
+
 @end

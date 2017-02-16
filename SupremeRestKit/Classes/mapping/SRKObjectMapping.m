@@ -8,6 +8,9 @@
 
 #import "SRKObjectMapping.h"
 #import "SRKObjectMapping_Private.h"
+#import "SRKMappingRelation_Private.h"
+//need it for keys
+#import "SRKMappingScope.h"
 @interface SRKObjectMapping ()
 
 @end
@@ -81,19 +84,14 @@
 
 -(instancetype)addRelation:(SRKMappingRelation*)relation{
     if (!_relations) {
-        _relations=[[NSMutableArray alloc] init];
+        _relations=[[NSMutableDictionary alloc] init];
     }
-    [_relations addObject:relation];
+    [_relations setValue:relation  forKey:relation.toKey];
     return self;
 }
 
--(instancetype)addRelation:(NSString*)fromKey rightKey:(NSString*)toKey relationMapping:(id)relationMapping{
-    if (!_relations) {
-        _relations=[[NSMutableArray alloc] init];
-    }
-    [_relations addObject:[SRKMappingRelation realtionWithFromKey:fromKey toKey:toKey mapping:relationMapping]];
-
-    return self;
+-(instancetype)addRelation:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping{
+    return [self addRelation:[SRKMappingRelation realtionWithFromKey:fromKey toKey:toKey mapping:relationMapping]];
     
 }
 -(instancetype)addObjectIdentifierKeyPath:(NSString *)keyPath{
@@ -116,4 +114,37 @@
     self.storageName=storageName;
     return self;
 }
+
+
+-(NSDictionary*)dictionaryRepresentation{
+    NSMutableDictionary * dictionary = [[NSMutableDictionary alloc] init];
+    
+    [dictionary setValue:self.className forKey:kSRKClassName];
+    [dictionary setValue:self.extends forKey:kSRKExtend];
+    [dictionary setValue:self.storageName forKey:kSRKStorageName];
+    [dictionary setValue:self.keyPath forKey:kSRKKeyPath];
+    
+    [dictionary setValue:self.permanent forKey:kSRKPermanent];
+    [dictionary setValue:self.properties forKey:kSRKProperties];
+    
+    NSMutableDictionary * relationsRepresentation = [[NSMutableDictionary alloc] init];
+    for (NSString * key in self.relations) {
+        SRKMappingRelation * relation = [self.relations valueForKey:key];
+        
+        NSString * complexKey;
+        
+        if (relation.fromKey == nil) {
+            complexKey=[NSString stringWithFormat:@"->%@",relation.toKey];
+        }else {
+            complexKey=[NSString stringWithFormat:@"%@->%@",relation.fromKey,relation.toKey];
+
+        }
+        
+        [relationsRepresentation setValue:relation forKey:complexKey];
+    }
+    [dictionary setValue:relationsRepresentation forKey:kSRKRelations];
+    
+    return dictionary;
+}
+
 @end

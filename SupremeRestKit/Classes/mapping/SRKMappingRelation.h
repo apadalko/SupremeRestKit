@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class DSObject;
-
+@class SRKObjectMapping;
 
 /**
  A block that validates current relation
@@ -32,7 +32,7 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,DSObject * pr
  
  @return new Mapping Relation.
  */
--(instancetype)initWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(id)mapping;
+-(instancetype)initWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
 
 /**
  Creates a new Mapping Relation
@@ -42,7 +42,7 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,DSObject * pr
  
  @return new Mapping Relation.
  */
-+(instancetype)realtionWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(id)mapping;
++(instancetype)realtionWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
 
 
 /**
@@ -57,19 +57,13 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,DSObject * pr
 /**
  mapping object could be String or SRKObjectMapping
  */
-@property (nonatomic,retain)id mapping;
+@property (nonatomic,retain)SRKObjectMapping * mapping;
 
 
 /**
  A block that validates current relation
- @note will have more priority than statement
  */
 @property (nonatomic,copy)SRKMappingRelationValidateBlock validationBlock;
-/**
- String based statement to validated current relation ex:->type==1||->type==2 where "->" means reference to value in data
- @note recommended to use as [left referenced value with "->" ] [operator >,=] [logical operator]
- */
-@property (nonatomic,retain)NSString * statement;
 
 
 /**

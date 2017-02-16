@@ -21,14 +21,18 @@
     [super viewDidLoad];
     
     self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
-    
+        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
     SRKMappingRelation * r;
 
+  SRKObjectMapping * act =  [SRKObjectMapping mappingExtends:@"activity"];
+    
+    [act addRelation:@"lalaUser" toKey:@"blaUser" relationMapping:[SRKObjectMapping mappingExtends:@"user"]];
     
     
-    SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
+   id m =  [scope getObjectMappings:act];
+
     
-    id m = [scope getObjectMappings:@"comments/following"];
+    m = [scope getObjectMappings:@"comments/following"];
     
     [self request1];
     
@@ -49,8 +53,8 @@
                                                                                 } andKeyPath:nil] addStorageName:@"User"];
     
     
-    
-    [postMapping addRelation:nil rightKey:@"user" relationMapping:userMapping];
+    [postMapping addRelation:nil toKey:@"user" relationMapping:userMapping];
+//    [postMapping addRelation:nil rightKey:@"user" relationMapping:userMapping];
 //    [postMapping addRelation:nil rightKey:@"user" relation:userMapping];
     
     
