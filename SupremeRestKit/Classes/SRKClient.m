@@ -24,11 +24,20 @@
 
 
 -(instancetype)initWithBaseURL:(NSURL *)url{
-   return [self initWithBaseURL:url andScope:nil];
+   return [self initWithBaseURL:url andScope:[SRKMappingScope defaultScope]];
 }
 -(instancetype)initWithBaseURL:(NSURL *)url andScope:(SRKMappingScope*)scope{
     if (self=[super init]) {
         
+        self.mappingScope=scope;
+        
+        self.sessionManager=[[AFHTTPSessionManager alloc] initWithBaseURL:url];
+        
+        AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+        [serializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [serializer setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+        serializer.timeoutInterval = 20.0;
+        [self.sessionManager setRequestSerializer:serializer];
     }
     return self;
 }
@@ -41,7 +50,7 @@
     return _workQueue;
 }
 -(void)setMappingScope:(SRKMappingScope*)mappingScope{
-    self.mappingScope=mappingScope;
+    _mappingScope=mappingScope;
     self.objectMapper=[[SRKObjectMapper alloc] initWithScope:mappingScope];
 }
 
@@ -65,29 +74,31 @@
     
     
     NSError *serializationError = nil;
-    NSMutableURLRequest * urlRequest = [request generateRequestWithSerialized:self.sessionManager.requestSerializer error:&serializationError];
+    NSMutableURLRequest * urlRequest = [request generateRequestWithBaseURL:self.sessionManager.baseURL serializer:[self.sessionManager requestSerializer] error:&serializationError];
     if (serializationError) {
 
         
 //        return nil;
+    }else{
+        __block NSURLSessionDataTask *dataTask = nil;
+        dataTask = [self.sessionManager dataTaskWithRequest:urlRequest
+                                             uploadProgress:nil
+                                           downloadProgress:nil
+                                          completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+                                              if (error) {
+                                                  
+                                                  [self _processError:error withTask:dataTask responseBlock:request.responseBlock];
+                                                  
+                                              } else {
+                                                  [self _processSuccess:responseObject urlPattern:request.urlPath mappings:request.mapping responseBlock:request.responseBlock];
+                                              }
+                                          }];
+        
+        
+        [dataTask resume];
     }
     
-    __block NSURLSessionDataTask *dataTask = nil;
-    dataTask = [self.sessionManager dataTaskWithRequest:request
-                          uploadProgress:nil
-                        downloadProgress:nil
-                       completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
-                           if (error) {
-                               
-                               [self _processError:error withTask:dataTask responseBlock:request.responseBlock];
-                            
-                           } else {
-                               [self _processSuccess:responseObject urlPattern:request.urlPath mappings:request.mapping responseBlock:request.responseBlock];
-                           }
-                       }];
-    
-    
-    [dataTask resume];
+
 
     
     

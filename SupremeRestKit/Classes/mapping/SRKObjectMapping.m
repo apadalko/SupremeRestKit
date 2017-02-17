@@ -123,7 +123,7 @@
     [dictionary setValue:self.extends forKey:kSRKExtend];
     [dictionary setValue:self.storageName forKey:kSRKStorageName];
     [dictionary setValue:self.keyPath forKey:kSRKKeyPath];
-    
+    [dictionary setValue:self.objectIdentifierKeyPath forKey:kSRKIndifiterKeyPath];
     [dictionary setValue:self.permanent forKey:kSRKPermanent];
     [dictionary setValue:self.properties forKey:kSRKProperties];
     

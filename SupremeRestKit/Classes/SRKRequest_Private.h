@@ -19,5 +19,5 @@
 
 -(NSString*)HTTPMethod;
 
--(NSMutableURLRequest*)generateRequestWithSerialized:(AFHTTPRequestSerializer <AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error;
+-(NSMutableURLRequest *)generateRequestWithBaseURL:(NSURL*)baseUrl serializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error;
 @end

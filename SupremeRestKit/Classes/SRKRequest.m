@@ -106,26 +106,39 @@
         case SRKRequestMethodPATCH:
             return @"PATCH";
         case SRKRequestMethodHEAD:
-            return "HEAD";
+            return @"HEAD";
         default:
             return @"GET";
             break;
     }
 }
 
--(NSMutableURLRequest *)generateRequestWithSerialized:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error{
-    
-    NSString * k =  AFQueryStringFromParameters(self.urlParams);
+-(NSMutableURLRequest *)generateRequestWithBaseURL:(NSURL*)baseUrl serializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error{
+//    typedef NSString * (^AFQueryStringSerializationBlock)(NSURLRequest *request, id parameters, NSError *__autoreleasing *error);
+
+//    query = self.queryStringSerialization(request, parameters, &serializationError);
+//    mutableRequest.URL = [NSURL URLWithString:[[mutableRequest.URL absoluteString] stringByAppendingFormat:mutableRequest.URL.query ? @"&%@" : @"?%@", query]];
+//    
+    NSURL * url  = [NSURL URLWithString:self.urlPath relativeToURL:baseUrl];
+    NSString * finalUrlString = [url absoluteString];
+    if (self.urlParams) {
+        NSString * paramsString =  AFQueryStringFromParameters(self.urlParams);
+
+        if (paramsString.length>0) {
+                    finalUrlString =[NSString stringWithFormat:@"%@%@%@",finalUrlString,url.query ? @"&%@" : @"?%@", paramsString];
+        }
+
+    }
     
     if (self.multiparts.count>0&&[self allowBodyOrMultipart]) {
-       return [serializer multipartFormRequestWithMethod:[self HTTPMethod] URLString:@"" parameters:self.body constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+       return [serializer multipartFormRequestWithMethod:[self HTTPMethod] URLString:finalUrlString parameters:self.body constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
            for (SRKMultipart * p in self.multiparts) {
                [formData appendPartWithFileData:[p data] name:[p name] fileName:[p fileName] mimeType:[p mimeType]];
            }
         } error:error];
         
     }else{
-        return   [serializer requestWithMethod:[self HTTPMethod] URLString:@"" parameters:[self allowBodyOrMultipart]?self.body:nil error:error];
+        return   [serializer requestWithMethod:[self HTTPMethod] URLString:finalUrlString parameters:[self allowBodyOrMultipart]?self.body:nil error:error];
     }
     
     

@@ -21,18 +21,18 @@
     [super viewDidLoad];
     
     self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
-        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
-    SRKMappingRelation * r;
-
-  SRKObjectMapping * act =  [SRKObjectMapping mappingExtends:@"activity"];
-    
-    [act addRelation:@"lalaUser" toKey:@"blaUser" relationMapping:[SRKObjectMapping mappingExtends:@"user"]];
-    
-    
-   id m =  [scope getObjectMappings:act];
-
-    
-    m = [scope getObjectMappings:@"comments/following"];
+//        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
+//    SRKMappingRelation * r;
+//
+//  SRKObjectMapping * act =  [SRKObjectMapping mappingExtends:@"activity"];
+//    
+//    [act addRelation:@"lalaUser" toKey:@"blaUser" relationMapping:[SRKObjectMapping mappingExtends:@"user"]];
+//    
+//    
+//   id m =  [scope getObjectMappings:act];
+//
+//    
+//    m = [scope getObjectMappings:@"comments/following"];
     
     [self request1];
     
@@ -58,7 +58,7 @@
 //    [postMapping addRelation:nil rightKey:@"user" relation:userMapping];
     
     
-    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" params:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
         
         
         DSObject * post = [response first];
@@ -75,7 +75,7 @@
                                                                                      @"id",
                                                                                    ]] addStorageName:@"Post"] addObjectIdentifierKeyPath:@"id"];
     
-    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" params:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
         
         NSLog(@"???");
     }];
