@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
 
 
 -(instancetype)addBodyParam:(NSString *)key value:(id)value;
--(instancetype)setBodyFromDictionary:(NSDictionary *)dict;
+-(instancetype)addBodyFromDict:(NSDictionary *)dict;
 
 
 @property (nonatomic,copy)SRKResponseBlock responseBlock;

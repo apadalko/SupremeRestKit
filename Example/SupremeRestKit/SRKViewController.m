@@ -34,7 +34,7 @@
 //    
 //    m = [scope getObjectMappings:@"comments/following"];
     
-    [self request1];
+    [self request3];
     
 	// Do any additional setup after loading the view, typically from a nib.
 }
@@ -57,16 +57,16 @@
 //    [postMapping addRelation:nil rightKey:@"user" relationMapping:userMapping];
 //    [postMapping addRelation:nil rightKey:@"user" relation:userMapping];
     
-    
+
     SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
         
         
         DSObject * post = [response first];
         post[@"user"][@"username"]=@"somenewusername";
         
-        [self request2];
+        [self request3];
         
-    }];
+    }] ;
     
     [self.client makeRequest:request];
 }
@@ -79,6 +79,34 @@
         
         NSLog(@"???");
     }];
+        [self.client makeRequest:request];
+}
+
+-(void)request3{
+    
+    DSObject * localPostObject = nil;
+    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
+                                                                                     @"id->objectId",
+                                                                                     @"userId",
+                                                                                     @"title",
+                                                                                     @"body"
+                                                                                     ]
+                                        ] addStorageName:@"Post"] addPermanentProperty:kDSLocalId value:localPostObject.localId];
+    SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+        
+        
+        DSObject * post = [response first];
+//        post[@"user"][@"username"]=@"somenewusername";
+//        
+//        [self request2];
+        
+    }]addBodyFromDict:@{
+                              
+                              @"title":@"hello",
+                              @"body":@"BODYYYYY",
+                              @"userId":@"1"
+                              
+                              }];
         [self.client makeRequest:request];
 }
 

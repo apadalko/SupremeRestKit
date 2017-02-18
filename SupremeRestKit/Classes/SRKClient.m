@@ -33,7 +33,7 @@
         
         self.sessionManager=[[AFHTTPSessionManager alloc] initWithBaseURL:url];
         
-        AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+        AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
         [serializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
         [serializer setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
         serializer.timeoutInterval = 20.0;
