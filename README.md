@@ -53,16 +53,16 @@ You load list if articles stored them in articleList. Then you will load a detai
 ```objc
 [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil 
     mapping:[
-        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] addObjectIdentifierKeyPath:@"id"] 
-        addRelationFromKey:@"user" toKey:@"fromUser"
-            relationMapping:
-                [SRKObjectMapping mappingWithProperties:@{@"username":@"username",@"id":@"objectId"}]
+        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] 
+        addObjectIdentifierKeyPath:@"id"] 
+        addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:
+            [SRKObjectMapping mappingWithProperties:@{@"username":@"username",@"id":@"objectId"}]
         ] 
     andResponseBlock:^(SRKResponse *response) {
         NSArray * fullArticleObject = [response first];
 
         [[articlesList firstObject] isEqual:fullArticleObject] // returns true
-        [articlesList firstObject][@"user"] // as well is object in array is the same - it have user
+        [articlesList firstObject][@"fromUse"] // as well is object in array is the same - it have user
         [articlesList firstObject][@"title"] // Awesome title - new updated title
 
 }]];
