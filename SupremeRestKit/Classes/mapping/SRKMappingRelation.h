@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class DSObject;
+@class SRKObject;
 @class SRKObjectMapping;
 
 /**
@@ -18,7 +18,7 @@
  
  @return Yes if valid to add this relation
  */
-typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,DSObject * preprocessedObject);
+typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,SRKObject * preprocessedObject);
 
 /**
  SRKMappingRelation objects using to define relations between response data(dictionary) and nested objects. ex : {"id":"1","title":"hi","poster":{"id":"1"}} where poster is nested object type of user so relation should be as: leftKey = "poster" , rightKey = "poster" mapping = [some user mapping]
@@ -73,7 +73,7 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,DSObject * pr
  
  @return current relation object.
  */
--(instancetype)addValidationBlock:(BOOL(^)(NSDictionary*data,DSObject * preprocessedObject))validationBlock;
+-(instancetype)addValidationBlock:(BOOL(^)(NSDictionary*data,SRKObject * preprocessedObject))validationBlock;
 
 
 @end

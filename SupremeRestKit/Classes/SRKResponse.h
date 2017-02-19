@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <DSObject/DSObject.h>
+#import "SRKObject.h"
 
 @interface SRKResponse : NSObject
 
 @property (nonatomic,retain)NSArray * objects;
--(DSObject*)first;
+-(SRKObject*)first;
 
 @property (nonatomic,retain)NSError * error;
 @property (nonatomic,retain)id rawData;

@@ -8,7 +8,8 @@
 
 #import "SRKObjectMapper.h"
 #import "SRKObjectMapper.h"
-#import <DSObject/DSObject_Private.h>
+#import "SRKObjectMapping_Private.h"
+#import "SRKObject_Private.h"
 @interface SRKObjectMapper ()
 @property (nonatomic,retain)SRKMappingScope * scope;
 @property (nonatomic,retain)dispatch_queue_t workQueue;
@@ -115,24 +116,23 @@ static dispatch_queue_t _workQueueForStatic;
 
 
 
-+(DSObject*)_processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping {
++(SRKObject*)_processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping {
     return [self __processData:data forMapping:mapping fetched:YES];
     
 }
-+(DSObject*)__processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping fetched:(BOOL)fetched{
++(SRKObject*)__processData:(NSDictionary *)data forMapping:(SRKObjectMapping *)mapping fetched:(BOOL)fetched{
     
     ///process rel mapping
     NSString * clName = [mapping className];
     Class cl = NSClassFromString(clName);
     if (!cl) {
-        cl=[DSObject class];
+        cl=[SRKObject class];
     }
-    DSObject * rkObject = [[cl alloc] init];
-    if (mapping.storageName) {
-        [rkObject setCustomStorageName:mapping.storageName];
-    }
+    
+    SRKObject * rkObject = [SRKObject objectWithType:mapping.storageName andData:nil];
 
-    NSDictionary * properties =[mapping valueForKey:@"properties"];
+
+    NSDictionary * properties = [mapping properties];
     for (NSString * prop in properties) {
         id val = [data valueForKeyPath:prop];
         if (![val isEqual:[NSNull null]]&&val) {
@@ -144,7 +144,7 @@ static dispatch_queue_t _workQueueForStatic;
         rkObject[@"objectId"]=[data valueForKeyPath:mapping.objectIdentifierKeyPath];
     }
     
-    NSDictionary * relations =[mapping valueForKey:@"relations"];
+    NSDictionary * relations =[mapping relations];
     for (NSString * key  in relations) {
         
         
@@ -182,11 +182,11 @@ static dispatch_queue_t _workQueueForStatic;
         rkObject[perpProp]=[permanent valueForKey:perpProp];
     }
     
-    return [rkObject localSync:fetched];
+    return [rkObject syncObject:fetched associatedObjects:nil];
     
 }
 
-+(void)proccessRelation:(id)relation forKey:(NSString*)key inObject:(DSObject*)obj withData:(NSDictionary*)data fetched:(BOOL)fetched{
++(void)proccessRelation:(id)relation forKey:(NSString*)key inObject:(SRKObject*)obj withData:(NSDictionary*)data fetched:(BOOL)fetched{
     
     NSArray * p = [key componentsSeparatedByString:@"->"];
     if (p.count!=2) {
@@ -218,14 +218,14 @@ static dispatch_queue_t _workQueueForStatic;
             NSMutableArray * result = [[NSMutableArray alloc] init];
             
             for (id subArrVal in subData) {
-                DSObject * subObject  = [self __processData:subArrVal forMapping:rel fetched:fetched];
+                SRKObject * subObject  = [self __processData:subArrVal forMapping:rel fetched:fetched];
                 if (subObject) {
                     [result addObject:subObject];
                 }
             }
             [obj setObject:result forKey:toKey];
         }else{
-            DSObject * subObject  = [self __processData:subData forMapping:rel fetched:fetched] ;
+            SRKObject * subObject  = [self __processData:subData forMapping:rel fetched:fetched] ;
             [obj setObject:subObject forKey:toKey];
         }
         

@@ -14,7 +14,7 @@
 
 
 /**
- SRKObjectMapping objects using to map dictionary to given object `DSObject`
+ SRKObjectMapping objects using to map dictionary to given object `SRKObject`
  
  you able to create mapping objects in two ways:
  
@@ -23,7 +23,7 @@
  
  Couple things that you should knew:
  
- - !!! if you want that object will be unique you need to add maping for objectId property which is basic for any `DSObject` subclass and DSObject itself
+ - !!! if you want that object will be unique you need to add maping for objectId property which is basic for any `SRKObject` subclass and SRKObject itself
  
  - if you want to map to the specific object class you should specify a className property
  - if you doesnt want to create a class but wanna still have a unique object specify storageName to make sure object will be saved in specific storage
@@ -82,7 +82,7 @@
 +(instancetype)mappingWithPropertiesArray:(NSArray*)props andKeyPath:(NSString*)keyPath indfiterKeyPath:(NSString*)indifiterKeyPath;;
 
 /**
- Creates a new Object Mapping with properties listed in dictionary {"K":"V"} where K is key in given data and V is property name in resulting object `DSObject`
+ Creates a new Object Mapping with properties listed in dictionary {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`
  
  @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
  
@@ -93,7 +93,7 @@
 +(instancetype)mappingWithProperties:(NSDictionary*)props;
 
 /**
- Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `DSObject`)  by specific key path
+ Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  by specific key path
  
  @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
  @param keyPath   key path in data (Dictionary) where resulting object should take data
@@ -104,7 +104,7 @@
  */
 +(instancetype)mappingWithProperties:(NSDictionary*)props andKeyPath:(NSString*)keyPath;
 /**
- Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `DSObject`)  by specific key path and indifiter key
+ Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  by specific key path and indifiter key
  
  @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
  @param keyPath   key path in data (Dictionary) where resulting object should take data
@@ -163,7 +163,7 @@
 
 /**
  name of the storage where give object will be saved
- @note by default `DSObject` will use name of the class
+ @note by default `SRKObject` will use name of the class
  */
 @property (nonatomic,retain)NSString * storageName;
 
@@ -187,7 +187,7 @@
  */
 -(instancetype)setPropertiesFromArray:(NSArray*)props;
 /**
- set the properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `DSObject`)  by specific key path and indifiter key
+ set the properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  by specific key path and indifiter key
  
  @param props    properties in dictionary.
  

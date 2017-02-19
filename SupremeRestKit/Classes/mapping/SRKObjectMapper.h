@@ -12,14 +12,14 @@
 
 
 /**
- SRKObjectMapper is used to map data (Dictionary) to a some `DSObject`
+ SRKObjectMapper is used to map data (Dictionary) to a some `SRKObject`
  
  you may able to use it in three way:
  i. use instance of SRKObjectMapper with scope (recommended for your code organization)
  ii. use static method +processDataInBackground:forMapping:complitBlock - if doesnt have mapping and just wanna to parse object
  iii. using default mapper after initialization.
  
- @note `DSObject` mapping extentions will use default mapping scope
+ @note `SRKObject` mapping extentions will use default mapping scope
  */
 @interface SRKObjectMapper : NSObject
 

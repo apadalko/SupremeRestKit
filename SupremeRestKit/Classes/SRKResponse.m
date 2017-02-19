@@ -9,7 +9,7 @@
 #import "SRKResponse.h"
 
 @implementation SRKResponse
--(DSObject*)first{
+-(SRKObject*)first{
     return [self.objects firstObject];
 }
 @end

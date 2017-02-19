@@ -20,7 +20,7 @@
     }
     return self;
 }
--(instancetype)addValidationBlock:(BOOL(^)(NSDictionary*data,DSObject * preprocessedObject))validationBlock{
+-(instancetype)addValidationBlock:(BOOL(^)(NSDictionary*data,SRKObject * preprocessedObject))validationBlock{
     self.validationBlock=validationBlock;
     return self;
 }

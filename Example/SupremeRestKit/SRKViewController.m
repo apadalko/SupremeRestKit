@@ -9,6 +9,16 @@
 #import "SRKViewController.h"
 #import <SupremeRestKit/SRKObjectMapping.h>
 #import <SupremeRestKit/SRKClient.h>
+#import <SupremeRestKit/SRKObject_.h>
+@interface TestObject : SRKObject_
+
+@property (nonatomic,retain)NSString * k;
+@end
+@implementation TestObject
+@synthesize k=_k;
+
+
+@end
 
 @interface SRKViewController ()
 @property (nonatomic,retain)SRKClient * client;
@@ -19,6 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+ 
+    TestObject * t = [TestObject objectWithType:@"sss" andData:@{}];
+    t.k = @"asda";
+    t[@"k"] = @"asd";
     
     self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
 //        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
@@ -84,18 +99,28 @@
 
 -(void)request3{
     
-    DSObject * localPostObject = nil;
+    
+    
+    SRKObject * localPostObject = [SRKObject objectWithType:@"Post" andData:@{
+                                                                              @"localId":@"lalal"
+                                                                              
+                                                                              }];
+    
+    NSLog(@"   %@",localPostObject.localId);
+    
     SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
                                                                                      @"id->objectId",
                                                                                      @"userId",
                                                                                      @"title",
                                                                                      @"body"
                                                                                      ]
-                                        ] addStorageName:@"Post"] addPermanentProperty:kDSLocalId value:localPostObject.localId];
+                                        ] addStorageName:@"Post"] addPermanentProperty:@"localId" value:localPostObject.localId];
     SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
         
         
         DSObject * post = [response first];
+        
+        NSLog(@"%@",localPostObject);
 //        post[@"user"][@"username"]=@"somenewusername";
 //        
 //        [self request2];
