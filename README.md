@@ -39,7 +39,10 @@ Very common - is that on  cell selection you will move to a new View Controller 
 So you will parse it as another article object . But unfortunately it will be another Article object instance . SupremeRestKit solve this problem:
 ```objc
 SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
-[client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"] andResponseBlock:^(SRKResponse *response) {
+[client makeRequest:
+[SRKRequest GETRequest:@"articles" urlParams:nil 
+mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"]
+andResponseBlock:^(SRKResponse *response) {
 NSArray * articlesList = [response objects];
 //articlesList have two objects type of SRKObject
 NSString * firstTitle = articlesList.firstObject[@"title"];
