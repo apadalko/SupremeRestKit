@@ -8,7 +8,7 @@
 
 
 
-## Why I should use this
+## "Why I should use this?"
 
 probably, have model like this :
 
@@ -70,6 +70,12 @@ You load list if articles stored them in articleList. Then you will load a detai
 
 Loading detailed object, and it will be the same object that you stored in articleList, so object that in array have updated property title , new properties text and user. So your tableView Cell will have updated object.
 Note, there is move simple way and elegant way to perform this task with SRKit 
+
+## Usage
+
+#Basic
+
+
 
 
 
