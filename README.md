@@ -44,9 +44,9 @@ SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"h
     mapping:
         [[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"]
     andResponseBlock:^(SRKResponse *response) {
-NSArray * articlesList = [response objects];
-//articlesList have two objects type of SRKObject
-NSString * firstTitle = articlesList.firstObject[@"title"];
+        NSArray * articlesList = [response objects];
+        //articlesList have two objects type of SRKObject
+        NSString * firstTitle = articlesList.firstObject[@"title"];
 }]];
 ```
 You load list if articles stored them in articleList. Then you will load a detailed article
@@ -56,12 +56,13 @@ You load list if articles stored them in articleList. Then you will load a detai
         [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] addObjectIdentifierKeyPath:@"id"] 
         addRelationFromKey:@"user" toKey:@"fromUser"
             relationMapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"username"]] addObjectIdentifierKeyPath:@"id"]
-        ] andResponseBlock:^(SRKResponse *response) {
-NSArray * fullArticleObject = [response first];
+        ] 
+    andResponseBlock:^(SRKResponse *response) {
+        NSArray * fullArticleObject = [response first];
 
-[[articlesList firstObject] isEqual:fullArticleObject] // returns true
-[articlesList firstObject][@"user"] // as well is object in array is the same - it have user
-[articlesList firstObject][@"title"] //
+        [[articlesList firstObject] isEqual:fullArticleObject] // returns true
+        [articlesList firstObject][@"user"] // as well is object in array is the same - it have user
+        [articlesList firstObject][@"title"] // Awesome title - new updated title
 
 }]];
 ```
