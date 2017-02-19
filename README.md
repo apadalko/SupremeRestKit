@@ -55,7 +55,8 @@ You load list if articles stored them in articleList. Then you will load a detai
     mapping:[
         [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] addObjectIdentifierKeyPath:@"id"] 
         addRelationFromKey:@"user" toKey:@"fromUser"
-            relationMapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"username"]] addObjectIdentifierKeyPath:@"id"]
+            relationMapping:
+                [SRKObjectMapping mappingWithPropertiesArray:@[@"username",@"id->objectId"]]
         ] 
     andResponseBlock:^(SRKResponse *response) {
         NSArray * fullArticleObject = [response first];
