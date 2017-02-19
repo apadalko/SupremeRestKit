@@ -26,9 +26,27 @@
 
 @implementation SRKViewController
 
+
+-(void)codeForReadMe{
+    
+    SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
+    [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"] andResponseBlock:^(SRKResponse *response) {
+        NSArray * articlesList = [response objects];
+        //articlesList have two objects type of SRKObject
+        NSString * firstTitle = articlesList.firstObject[@"title"];
+    }]];
+    
+    
+    
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    
     
  
     TestObject * t = [TestObject objectWithType:@"sss" andData:@{}];

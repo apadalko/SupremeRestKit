@@ -15,14 +15,14 @@ probably, have model like this :
 ```json
 {
     "id":1,
-    "title": first title 
+    "title": "first title"
 },
 {
     "id":2,
-    "title":title for article 2
+    "title": "title for article 2"
 }
 ```
-So  u successfully parsed it and get this array [Article1,Article2] . 
+You successfully parsed it and get this array [Article1,Article2] . 
 Then move this array forward somewhere in your App , for ex , in Table View.
 Very common - is that on  cell selection you will move to a new View Controller and load more detailed object for article with Id = 1 : 
 ```json
@@ -31,14 +31,20 @@ Very common - is that on  cell selection you will move to a new View Controller 
     "title": "Awesome title" , //title have been updated
     "text": "Some text",
     "user":{
-        "id": 109
+        "id": 109,
         "username": "awesome1"
     }
 }
 ```
 So you will parse it as another article object . But unfortunately it will be another Article object instance . SupremeRestKit solve this problem:
-
-Example, Example 
+```objc
+SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
+[client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"] andResponseBlock:^(SRKResponse *response) {
+NSArray * articlesList = [response objects];
+//articlesList have two objects type of SRKObject
+NSString * firstTitle = articlesList.firstObject[@"title"];
+}]];
+```
 
 Loading list if objects , storing it in articleList
 
