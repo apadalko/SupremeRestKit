@@ -228,7 +228,7 @@
  @return current Mapping Object.
  
  */
--(instancetype)addRelation:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping;
+-(instancetype)addRelationFromKey:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping;
 
 /**
  add a new realtion to mapping

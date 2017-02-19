@@ -41,17 +41,30 @@ So you will parse it as another article object . But unfortunately it will be an
 SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
 [client makeRequest:
 [SRKRequest GETRequest:@"articles" urlParams:nil 
-mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"]
-andResponseBlock:^(SRKResponse *response) {
+    mapping:
+        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"]
+    andResponseBlock:^(SRKResponse *response) {
 NSArray * articlesList = [response objects];
 //articlesList have two objects type of SRKObject
 NSString * firstTitle = articlesList.firstObject[@"title"];
 }]];
 ```
+You load list if articles stored them in articleList. Then you will load a detailed article
+```objc
+[client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil 
+    mapping:[
+        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] addObjectIdentifierKeyPath:@"id"] 
+        addRelationFromKey:@"user" toKey:@"fromUser"
+            relationMapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"username"]] addObjectIdentifierKeyPath:@"id"]
+        ] andResponseBlock:^(SRKResponse *response) {
+NSArray * fullArticleObject = [response first];
 
-Loading list if objects , storing it in articleList
+[[articlesList firstObject] isEqual:fullArticleObject] // returns true
+[articlesList firstObject][@"user"] // as well is object in array is the same - it have user
+[articlesList firstObject][@"title"] //
 
-Example example 
+}]];
+```
 
 Loading detailed object, and it will be the same object that you stored in articleList, so object that in array have updated property title , new properties text and user. So your tableView Cell will have updated object.
 Note, there is move simple way and elegant way to perform this task with SRKit 

@@ -38,6 +38,14 @@
     
     
     
+//    [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] addObjectIdentifierKeyPath:@"id"] addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"username"]] addObjectIdentifierKeyPath:@"id"]] andResponseBlock:^(SRKResponse *response) {
+//        NSArray * fullArticleObject = [response first];
+//      
+//        [[articlesList firstObject] isEqual:fullArticleObject] // returns true
+//        [articlesList firstObject][@"user"] // as well is object in array is the same - it have user
+//        [articlesList firstObject][@"title"] //
+//        
+//    }]];
     
 }
 

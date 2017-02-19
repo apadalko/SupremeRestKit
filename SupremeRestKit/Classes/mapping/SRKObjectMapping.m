@@ -90,7 +90,7 @@
     return self;
 }
 
--(instancetype)addRelation:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping{
+-(instancetype)addRelationFromKey:(NSString*)fromKey toKey:(NSString*)toKey relationMapping:(SRKObjectMapping*)relationMapping{
     return [self addRelation:[SRKMappingRelation realtionWithFromKey:fromKey toKey:toKey mapping:relationMapping]];
     
 }
