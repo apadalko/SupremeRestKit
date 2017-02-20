@@ -11,6 +11,7 @@
 #import "SRKMappingRelation_Private.h"
 //need it for keys
 #import "SRKMappingScope.h"
+#import "SRKObject.h"
 @interface SRKObjectMapping ()
 
 @end
@@ -148,27 +149,4 @@
 
 @end
 
-@implementation SRKObject (SRKMapping)
-+(SRKObjectMapping *)mappingExtends:(NSString *)extend{
-    return [[SRKObjectMapping mappingExtends:extend] setMappingObjectType:[self class]];
-}
 
-
-+(SRKObjectMapping *)mappingWithProperties:(NSDictionary *)props{
-    return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
-}
-
-+(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return  [[SRKObjectMapping mappingWithProperties:props  indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
-}
-
-
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props{
-    return [[SRKObjectMapping mappingWithPropertiesArray:props] setMappingObjectType:[self class]];
-}
-
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return [SRKObjectMapping mappingWithPropertiesArray:props  indfiterKeyPath:indifiterKeyPath];
-}
-
-@end
