@@ -109,6 +109,10 @@
     [_permanent setValue:value forKey:key];
     return self;
 }
+-(instancetype)setMappingObjectType:(Class)objectType{
+    self.className = NSStringFromClass(objectType);
+    return self;
+}
 
 -(instancetype)setStorageName:(NSString *)storageName{
     self.customStorageName=storageName;
@@ -145,6 +149,35 @@
     [dictionary setValue:relationsRepresentation forKey:kSRKRelations];
     
     return dictionary;
+}
+
+@end
+
+@implementation SRKObject (SRKMapping)
++(SRKObjectMapping *)mappingExtends:(NSString *)extend{
+    return [[SRKObjectMapping mappingExtends:extend] setMappingObjectType:[self class]];
+}
+
+
++(SRKObjectMapping *)mappingWithProperties:(NSDictionary *)props{
+    return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
+}
++(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props andKeyPath:(NSString *)keyPath{
+    return  [[SRKObjectMapping mappingWithProperties:props andKeyPath:keyPath] setMappingObjectType:[self class]];
+}
++(SRKObjectMapping*)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath indfiterKeyPath:(NSString *)indifiterKeyPath{
+    return  [[SRKObjectMapping mappingWithProperties:props andKeyPath:keyPath indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
+}
+
+
++(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props{
+    return [[SRKObjectMapping mappingWithPropertiesArray:props] setMappingObjectType:[self class]];
+}
++(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath{
+    return [[SRKObjectMapping mappingWithPropertiesArray:props andKeyPath:keyPath] setMappingObjectType:[self class]];
+}
++(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath indfiterKeyPath:(NSString *)indifiterKeyPath{
+    return [SRKObjectMapping mappingWithPropertiesArray:props andKeyPath:keyPath indfiterKeyPath:indifiterKeyPath];
 }
 
 @end

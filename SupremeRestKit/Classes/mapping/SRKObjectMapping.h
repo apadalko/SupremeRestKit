@@ -12,7 +12,7 @@
 #import "SRKMappingRelation.h"
 
 
-
+#import "SRKObject.h"
 /**
  SRKObjectMapping objects using to map dictionary to given object `SRKObject`
  
@@ -132,13 +132,13 @@
 
 
 #pragma mark - properties
+///**
+// class of resulting object, make sure that class Exsits
+// @note if you use extend - it will use the className/object type of 'Super' Mapping
+// */
+//@property (nonatomic,retain)Class objectType;
 
 
-/**
- name of the class of resulting object, make sure that class Exsits
- @note if you use extend - it will use the className of 'Super' Mapping
- */
-@property (nonatomic,retain)NSString * className;
 
 /**
  key path in data (Dictionary) where resulting object should take data
@@ -257,4 +257,114 @@
  @return current Mapping Object.
  */
 -(instancetype)setMappingKeyPath:(NSString*)keyPath;
+
+/**
+ sets the class of resulting object, make sure that class Exsits
+ @param objectType    class of the resulting bject
+
+ @return current Mapping Object.
+
+ @note if you use extend - it will use the className/object type of 'Super' Mapping
+ */
+-(instancetype)setMappingObjectType:(Class)objectType;
+
 @end
+
+
+
+
+
+/**
+ usfull extention of SRKObject that allow to easy create a mapping for related object class
+ */
+@interface SRKObject (SRKMapping)
+/**
+Creates a new Object Mapping with propeties listed in array , u able to rename them by using arrow "->" ex @[@"full_name->fullName",...]
+
+@param props    properties listed in Array.
+
+@note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+@note you able to rename properies by using arrow symbol "->" ex : @["id->objectId","name->username","bio","age","full_name->fullName"]
+
+@return new Mapping Object ready for mapping.
+*/
++(instancetype)mappingWithPropertiesArray:(NSArray*)props;
+/**
+ Creates a new Object Mapping with propeties listed in array by specific key path , u able to rename them by using arrow "->" ex @[@"full_name->fullName",...]
+ 
+ @param props     properties listed in Array.
+ @param keyPath   key path in data (Dictionary) where resulting object should take data
+ 
+ @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+ @note you able to rename properies by using arrow symbol "->" ex : @["id->objectId","name->username","bio","age","full_name->fullName"]
+ 
+ @return new Mapping Object ready for mapping.
+ */
++(instancetype)mappingWithPropertiesArray:(NSArray*)props andKeyPath:(NSString*)keyPath;
+
+/**
+ Creates a new Object Mapping with propeties listed in array by specific key path and indifiter , u able to rename them by using arrow "->" ex @[@"full_name->fullName",...]
+ 
+ @param props     properties listed in Array.
+ @param keyPath   key path in data (Dictionary) where resulting object should take data
+ @param indifiterKeyPath   using to map objectId from given data
+ 
+ @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+ @note you able to rename properies by using arrow symbol "->" ex : @["id->objectId","name->username","bio","age","full_name->fullName"]
+ @note use this initialized if u didn't plan to map objectId in propertiesArray
+ 
+ @return new Mapping Object ready for mapping.
+ */
++(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray*)props andKeyPath:(NSString*)keyPath indfiterKeyPath:(NSString*)indifiterKeyPath;;
+
+/**
+ Creates a new Object Mapping with properties listed in dictionary {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`
+ 
+ @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
+ 
+ @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+ 
+ @return new Mapping Object ready for mapping.
+ */
++(SRKObjectMapping *)mappingWithProperties:(NSDictionary*)props;
+
+/**
+ Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  by specific key path
+ 
+ @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
+ @param keyPath   key path in data (Dictionary) where resulting object should take data
+ 
+ @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+ 
+ @return new Mapping Object ready for mapping.
+ */
++(SRKObjectMapping *)mappingWithProperties:(NSDictionary*)props andKeyPath:(NSString*)keyPath;
+/**
+ Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  by specific key path and indifiter key
+ 
+ @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
+ @param keyPath   key path in data (Dictionary) where resulting object should take data
+ @param indifiterKeyPath   using to map objectId from given data
+ 
+ @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+ @note use this initialized if u didn't plan to map objectId in properties dictionary
+ 
+ @return new Mapping Object ready for mapping.
+ */
++(SRKObjectMapping *)mappingWithProperties:(NSDictionary*)props andKeyPath:(NSString*)keyPath indfiterKeyPath:(NSString*)indifiterKeyPath;
+
+/**
+ Creates a new Object Mapping extended form another mapping in a current Mapping Scope
+ 
+ @param extend    name of another the mapping in a current mapping scope
+ 
+ @return new Mapping Object ready for mapping.
+ 
+ @note all properties would be extended from 'Super' Mapping
+ @note see -addMapping:withName: in `SRKMappingScope`
+ */
++(SRKObjectMapping *)mappingExtends:(NSString*)extend;
+
+
+@end
+

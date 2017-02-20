@@ -26,4 +26,10 @@
 
 
 -(NSDictionary*)dictionaryRepresentation;
+
+/**
+ name of the class of resulting object, make sure that class Exsits
+ @note if you use extend - it will use the className/object type of 'Super' Mapping
+ */
+@property (nonatomic,retain)NSString * className;
 @end

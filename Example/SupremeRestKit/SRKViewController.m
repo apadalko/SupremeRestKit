@@ -10,6 +10,16 @@
 #import <SupremeRestKit/SRKObjectMapping.h>
 #import <SupremeRestKit/SRKClient.h>
 #import <SupremeRestKit/SRKObject_.h>
+
+
+@interface Article :SRKObject
+
+@end
+@implementation Article
+
+@end
+
+
 @interface TestObject : SRKObject_
 
 @property (nonatomic,retain)NSString * k;
@@ -32,6 +42,7 @@
     //define client
     SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
     //define mapping
+    
     SRKObjectMapping * mapping = [SRKObjectMapping mappingWithPropertiesArray:@[@"title"]];
     //add id for mapping
     [mapping setIdentifierKeyPath:@"id"];
@@ -65,6 +76,12 @@
         //articlesList have two objects type of SRKObject
         NSString * firstTitle = articlesList.firstObject[@"title"];
     }]];
+    
+    
+    
+    ///
+    SRKObjectMapping * articleMapping = [Article mappingWithProperties:@{@"title":@"title",@"id":@"objectId"}];
+    
     
     
     
