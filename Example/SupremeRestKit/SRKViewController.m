@@ -11,12 +11,18 @@
 #import <SupremeRestKit/SRKClient.h>
 #import <SupremeRestKit/SRKObject_.h>
 
-
+@interface User : SRKObject
+@property (nonatomic,retain) NSString * username;
+@end
+@implementation User
+@dynamic username;
+@end
 @interface Article :SRKObject
-
+@property (nonatomic,retain)NSString * title;
+@property (nonatomic,retain)NSString * text;
 @end
 @implementation Article
-
+@dynamic title,text;
 @end
 
 
@@ -81,7 +87,8 @@
     
     ///
     SRKObjectMapping * articleMapping = [Article mappingWithProperties:@{@"title":@"title",@"id":@"objectId"}];
-    
+    SRKObjectMapping * userMapping = [User mappingWithPropertiesArray:@[@"username"] indfiterKeyPath:@"id"];
+    [articleMapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:userMapping];
     
     
     

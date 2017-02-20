@@ -95,15 +95,47 @@ SRKObjectMapping * nestedMapping = [SRKObjectMapping mappingWithProperties:
 [nestedMapping setStorageName:@"User"];
 //adding relation
 [mapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:nestedMapping];
-// or   [mapping addRelation:[SRKMappingRelation realtionWithFromKey:@"user" toKey:@"fromUser" mapping:mapping]];
+//or [mapping addRelation:[SRKMappingRelation realtionWithFromKey:@"user" toKey:@"fromUser" mapping:mapping]];
 
 
 //create request
-SRKRequest * request = [SRKRequest GETRequest:@"articles" urlParams:nil mapping:mapping andResponseBlock:^(SRKResponse *response) {
+SRKRequest * request = 
+[SRKRequest GETRequest:@"articles" urlParams:nil mapping:mapping andResponseBlock:^(SRKResponse *response) {
 
 }];
 //make request
 [client makeRequest:request];
+```
+### Subclassing
+Idea behind subclassing is that evry dynamic property meant to be a value from response, data
+```objc
+@interface User : SRKObject
+@property (nonatomic,retain) NSString * username;
+@end
+@implementation User
+@dynamic username;
+@end
+@interface Article :SRKObject
+@property (nonatomic,retain)NSString * title;
+@property (nonatomic,retain)NSString * text;
+@end
+@implementation Article
+@dynamic title,text;
+@end
+//you can access property as normal
+user.username
+//or as subscript
+user[@"username"]
+//or
+[user objectForKey:@"username"]
+```
+every SRKObject subclass have ability to generate Mapping Object
+```objc
+SRKObjectMapping * articleMapping = 
+    [Article mappingWithProperties:@{@"title":@"title",@"id":@"objectId"}];
+SRKObjectMapping * userMapping = 
+    [User mappingWithPropertiesArray:@[@"username"] indfiterKeyPath:@"id"];
+[articleMapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:userMapping];
 ```
 
 

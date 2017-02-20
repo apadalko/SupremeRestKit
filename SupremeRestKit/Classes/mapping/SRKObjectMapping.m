@@ -158,7 +158,7 @@
     return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
 }
 
-+(SRKObjectMapping*)mappingWithPropertiesArray:(NSArray *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
++(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
     return  [[SRKObjectMapping mappingWithProperties:props  indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
 }
 
@@ -169,6 +169,6 @@
 
 +(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props indfiterKeyPath:(NSString *)indifiterKeyPath{
     return [SRKObjectMapping mappingWithPropertiesArray:props  indfiterKeyPath:indifiterKeyPath];
-}s
+}
 
 @end
