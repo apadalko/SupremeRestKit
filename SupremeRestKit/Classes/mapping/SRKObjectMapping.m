@@ -29,31 +29,26 @@
     return self;
 }
 +(instancetype)mappingWithPropertiesArray:(NSArray*)props{
-    return  [self mappingWithPropertiesArray:props andKeyPath:nil indfiterKeyPath:nil];
+    return  [self mappingWithPropertiesArray:props  indfiterKeyPath:nil];
 }
 
-+(instancetype)mappingWithPropertiesArray:(NSArray*)props andKeyPath:(NSString *)keyPath{
-    return  [self mappingWithPropertiesArray:props andKeyPath:keyPath indfiterKeyPath:nil];
-}
-+(instancetype)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath indfiterKeyPath:(NSString *)indifiterKeyPath{
++(instancetype)mappingWithPropertiesArray:(NSArray *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
     
     NSMutableDictionary * propsDict = [[NSMutableDictionary alloc] init];
     for (NSString * k in props) {
         NSArray * arr = [k componentsSeparatedByString:@"->"];
         [propsDict setValue:[arr lastObject] forKey:[arr firstObject]];
     }
-    return [self mappingWithProperties:propsDict andKeyPath:keyPath indfiterKeyPath:indifiterKeyPath];
+    return [self mappingWithProperties:propsDict  indfiterKeyPath:indifiterKeyPath];
 }
 
 +(instancetype)mappingWithProperties:(NSDictionary*)props{
-    return [self mappingWithProperties:props andKeyPath:nil];
+    return [self mappingWithProperties:props indfiterKeyPath:nil];
 }
-+(instancetype)mappingWithProperties:(NSDictionary *)props andKeyPath:(NSString *)keyPath{
-    return [self mappingWithProperties:props andKeyPath:keyPath indfiterKeyPath:nil];
-}
-+(instancetype)mappingWithProperties:(NSDictionary*)props andKeyPath:(NSString*)keyPath indfiterKeyPath:(NSString*)indifiterKeyPath{
+
++(instancetype)mappingWithProperties:(NSDictionary*)props indfiterKeyPath:(NSString*)indifiterKeyPath{
     SRKObjectMapping * mapping = [[SRKObjectMapping alloc] init];
-    mapping.keyPath=keyPath;
+
     mapping.objectIdentifierKeyPath=indifiterKeyPath;
     NSMutableDictionary * propsDict = [[NSMutableDictionary alloc] init];
     
@@ -162,22 +157,18 @@
 +(SRKObjectMapping *)mappingWithProperties:(NSDictionary *)props{
     return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
 }
-+(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props andKeyPath:(NSString *)keyPath{
-    return  [[SRKObjectMapping mappingWithProperties:props andKeyPath:keyPath] setMappingObjectType:[self class]];
-}
-+(SRKObjectMapping*)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return  [[SRKObjectMapping mappingWithProperties:props andKeyPath:keyPath indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
+
++(SRKObjectMapping*)mappingWithPropertiesArray:(NSArray *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
+    return  [[SRKObjectMapping mappingWithProperties:props  indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
 }
 
 
 +(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props{
     return [[SRKObjectMapping mappingWithPropertiesArray:props] setMappingObjectType:[self class]];
 }
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath{
-    return [[SRKObjectMapping mappingWithPropertiesArray:props andKeyPath:keyPath] setMappingObjectType:[self class]];
-}
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props andKeyPath:(NSString *)keyPath indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return [SRKObjectMapping mappingWithPropertiesArray:props andKeyPath:keyPath indfiterKeyPath:indifiterKeyPath];
-}
+
++(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props indfiterKeyPath:(NSString *)indifiterKeyPath{
+    return [SRKObjectMapping mappingWithPropertiesArray:props  indfiterKeyPath:indifiterKeyPath];
+}s
 
 @end
