@@ -21,9 +21,18 @@
 @property (nonatomic,retain) User * fromUser;
 @property (nonatomic,retain)NSString * title;
 @property (nonatomic,retain)NSString * text;
+@property (nonatomic,retain)NSString * ownProperty;
 @end
 @implementation Article
 @dynamic title,text,fromUser;
+@dynamic ownProperty;
+
+-(void)setOwnProperty:(NSString *)ownProperty{
+    [super setObject:ownProperty forKey:@"ownProperty"];
+}
+-(NSString *)ownProperty{
+    return [super objectForKey:@"ownProperty"];
+}
 @end
 
 
@@ -45,6 +54,12 @@
 
 
 -(void)codeForReadMe{
+    
+    [SRKObject objectWithData:@{}];
+    
+    Article * art = [Article objectWithData:@{}];
+    art[@"ownProperty"] = @"asdasd";
+    NSLog(@"art");
     
     //define client
     SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
@@ -132,6 +147,8 @@
     
     [self request3];
     
+//    [self codeForReadMe];
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -182,38 +199,38 @@
 //    
 //    
 //    
-//    SRKObject * localPostObject = [SRKObject objectWithType:@"Post" andData:@{
-//                                                                              @"localId":@"lalal"
-//                                                                              
-//                                                                              }];
-//    
-//    NSLog(@"   %@",localPostObject.localId);
-//    
-//    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
-//                                                                                     @"id->objectId",
-//                                                                                     @"userId",
-//                                                                                     @"title",
-//                                                                                     @"body"
-//                                                                                     ]
-//                                        ] addStorageName:@"Post"] addPermanentProperty:@"localId" value:localPostObject.localId];
-//    SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+    SRKObject * localPostObject = [SRKObject objectWithType:@"Post" andData:@{
+                                                                              @"localId":@"lalal"
+                                                                              
+                                                                              }];
+    
+    NSLog(@"   %@",localPostObject.localId);
+    
+    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
+                                                                                     @"id->objectId",
+                                                                                     @"userId",
+                                                                                     @"title",
+                                                                                     @"body"
+                                                                                     ]
+                                        ] setStorageName:@"Post"] addPermanentProperty:@"localId" value:localPostObject.localId];
+    SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+        
+        
+        DSObject * post = [response first];
+        
+        NSLog(@"%@",localPostObject);
+//        post[@"user"][@"username"]=@"somenewusername";
 //        
-//        
-//        DSObject * post = [response first];
-//        
-//        NSLog(@"%@",localPostObject);
-////        post[@"user"][@"username"]=@"somenewusername";
-////        
-////        [self request2];
-//        
-//    }]addBodyFromDict:@{
-//                              
-//                              @"title":@"hello",
-//                              @"body":@"BODYYYYY",
-//                              @"userId":@"1"
-//                              
-//                              }];
-//        [self.client makeRequest:request];
+//        [self request2];
+        
+    }]addBodyFromDict:@{
+                              
+                              @"title":@"hello",
+                              @"body":@"BODYYYYY",
+                              @"userId":@"1"
+                              
+                              }];
+        [self.client makeRequest:request];
 }
 
 - (void)didReceiveMemoryWarning
