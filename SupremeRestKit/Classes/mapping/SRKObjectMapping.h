@@ -165,7 +165,7 @@
  name of the storage where give object will be saved
  @note by default `SRKObject` will use name of the class
  */
-@property (nonatomic,retain)NSString * storageName;
+@property (nonatomic,retain)NSString * customStorageName;
 
 /**
  key path for object indentifier , use this if you not planing to map objectId properties
@@ -205,18 +205,18 @@
  @note use this if you not planing to map objectId properties
  
  */
--(instancetype)addObjectIdentifierKeyPath:(NSString*)keyPath;
+-(instancetype)setIdentifierKeyPath:(NSString*)keyPath;
 
 /**
  set the custom storage Name, usefull when you doesnt have a physicall class of objects
  
- @param storageName    name of the storage in memory.
+ @param objectsType    name of the storage in memory.
  
  @return current Mapping Object.
- @note use this if you do not specify className and still wanna have unique object in storage
+ @note use this if you didnt have custom `SRKObject` subclass and still wanna have unique object in storage
  
  */
--(instancetype)addStorageName:(NSString*)storageName;
+-(instancetype)setStorageName:(NSString*)storageName;
 
 /**
  add a new realtion to mapping
@@ -256,5 +256,5 @@
  
  @return current Mapping Object.
  */
--(instancetype)addKeyPath:(NSString*)keyPath;
+-(instancetype)setMappingKeyPath:(NSString*)keyPath;
 @end

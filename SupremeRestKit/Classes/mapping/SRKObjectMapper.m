@@ -129,7 +129,7 @@ static dispatch_queue_t _workQueueForStatic;
         cl=[SRKObject class];
     }
     
-    SRKObject * rkObject = [SRKObject objectWithType:mapping.storageName andData:nil];
+    SRKObject * rkObject = [cl objectWithType:mapping.customStorageName andData:nil];
 
 
     NSDictionary * properties = [mapping properties];

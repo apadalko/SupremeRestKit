@@ -184,7 +184,7 @@ static SRKMappingScope * _defaultScope;
                 className=[extendedMapping className];
             }
             if (!storageName) {
-                storageName = [extendedMapping storageName];
+                storageName = [extendedMapping customStorageName];
             }
             if (!keyPath) {
                 keyPath = [extendedMapping keyPath];

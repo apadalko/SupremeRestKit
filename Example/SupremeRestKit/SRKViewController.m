@@ -29,8 +29,38 @@
 
 -(void)codeForReadMe{
     
+    //define client
     SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
-    [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"] andResponseBlock:^(SRKResponse *response) {
+    //define mapping
+    SRKObjectMapping * mapping = [SRKObjectMapping mappingWithPropertiesArray:@[@"title"]];
+    //add id for mapping
+    [mapping setIdentifierKeyPath:@"id"];
+    /*set RAM storage name where you will store this type of object,
+     not needed if you are using subclases**/
+    [mapping setStorageName:@"Article"];
+    //if you have a nested objects - add a relation with mapping
+    SRKObjectMapping * nestedMapping = [SRKObjectMapping mappingWithProperties:
+                                        @{
+                                          @"id":@"objectId",// objectId - default indifiter key
+                                          @"username":@"username"
+                                          }];
+    //RAM Storage Name for nested object
+    [nestedMapping setStorageName:@"User"];
+    //adding relation
+    [mapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:nestedMapping];
+// or   [mapping addRelation:[SRKMappingRelation realtionWithFromKey:@"user" toKey:@"fromUser" mapping:mapping]];
+    
+    
+    //create request
+    SRKRequest * request = [SRKRequest GETRequest:@"articles" urlParams:nil mapping:mapping andResponseBlock:^(SRKResponse *response) {
+        
+    }];
+    //make request
+    [client makeRequest:request];
+    
+    
+    
+    [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil mapping:[[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] setIdentifierKeyPath:@"id"] setStorageName:@"Article"] andResponseBlock:^(SRKResponse *response) {
         NSArray * articlesList = [response objects];
         //articlesList have two objects type of SRKObject
         NSString * firstTitle = articlesList.firstObject[@"title"];
@@ -84,81 +114,81 @@
     
 //    [SRKObjectMapping map]
     
-    SRKObjectMapping * postMapping = [[SRKObjectMapping mappingWithPropertiesArray:@[
-                                                                                     @"id->objectId",
-                                                                                     @"userId",
-                                                                                     @"title",
-                                                                                     @"body"]] addStorageName:@"Post"];
-    SRKObjectMapping * userMapping = [[SRKObjectMapping mappingWithProperties:@{
-                                                                                @"userId":@"objectId"
-                                                                                } andKeyPath:nil] addStorageName:@"User"];
-    
-    
-    [postMapping addRelation:nil toKey:@"user" relationMapping:userMapping];
-//    [postMapping addRelation:nil rightKey:@"user" relationMapping:userMapping];
-//    [postMapping addRelation:nil rightKey:@"user" relation:userMapping];
-    
-
-    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
-        
-        
-        DSObject * post = [response first];
-        post[@"user"][@"username"]=@"somenewusername";
-        
-        [self request3];
-        
-    }] ;
-    
-    [self.client makeRequest:request];
+//    SRKObjectMapping * postMapping = [[SRKObjectMapping mappingWithPropertiesArray:@[
+//                                                                                     @"id->objectId",
+//                                                                                     @"userId",
+//                                                                                     @"title",
+//                                                                                     @"body"]] addStorageName:@"Post"];
+//    SRKObjectMapping * userMapping = [[SRKObjectMapping mappingWithProperties:@{
+//                                                                                @"userId":@"objectId"
+//                                                                                } andKeyPath:nil] addStorageName:@"User"];
+//    
+//    
+////    [postMapping addRelation:nil toKey:@"user" relationMapping:userMapping];
+////    [postMapping addRelation:nil rightKey:@"user" relationMapping:userMapping];
+////    [postMapping addRelation:nil rightKey:@"user" relation:userMapping];
+//    
+//
+//    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+//        
+//        
+//        DSObject * post = [response first];
+//        post[@"user"][@"username"]=@"somenewusername";
+//        
+//        [self request3];
+//        
+//    }] ;
+//    
+//    [self.client makeRequest:request];
 }
 -(void)request2{
-    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
-                                                                                     @"id",
-                                                                                   ]] addStorageName:@"Post"] addObjectIdentifierKeyPath:@"id"];
-    
-    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
-        
-        NSLog(@"???");
-    }];
-        [self.client makeRequest:request];
+//    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
+//                                                                                     @"id",
+//                                                                                   ]] addStorageName:@"Post"] addObjectIdentifierKeyPath:@"id"];
+//    
+//    SRKRequest * request = [SRKRequest GETRequest:@"posts/1" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
+//        
+//        NSLog(@"???");
+//    }];
+//        [self.client makeRequest:request];
 }
 
 -(void)request3{
-    
-    
-    
-    SRKObject * localPostObject = [SRKObject objectWithType:@"Post" andData:@{
-                                                                              @"localId":@"lalal"
-                                                                              
-                                                                              }];
-    
-    NSLog(@"   %@",localPostObject.localId);
-    
-    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
-                                                                                     @"id->objectId",
-                                                                                     @"userId",
-                                                                                     @"title",
-                                                                                     @"body"
-                                                                                     ]
-                                        ] addStorageName:@"Post"] addPermanentProperty:@"localId" value:localPostObject.localId];
-    SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
-        
-        
-        DSObject * post = [response first];
-        
-        NSLog(@"%@",localPostObject);
-//        post[@"user"][@"username"]=@"somenewusername";
+//    
+//    
+//    
+//    SRKObject * localPostObject = [SRKObject objectWithType:@"Post" andData:@{
+//                                                                              @"localId":@"lalal"
+//                                                                              
+//                                                                              }];
+//    
+//    NSLog(@"   %@",localPostObject.localId);
+//    
+//    SRKObjectMapping * postMapping = [[[SRKObjectMapping mappingWithPropertiesArray:@[
+//                                                                                     @"id->objectId",
+//                                                                                     @"userId",
+//                                                                                     @"title",
+//                                                                                     @"body"
+//                                                                                     ]
+//                                        ] addStorageName:@"Post"] addPermanentProperty:@"localId" value:localPostObject.localId];
+//    SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
 //        
-//        [self request2];
-        
-    }]addBodyFromDict:@{
-                              
-                              @"title":@"hello",
-                              @"body":@"BODYYYYY",
-                              @"userId":@"1"
-                              
-                              }];
-        [self.client makeRequest:request];
+//        
+//        DSObject * post = [response first];
+//        
+//        NSLog(@"%@",localPostObject);
+////        post[@"user"][@"username"]=@"somenewusername";
+////        
+////        [self request2];
+//        
+//    }]addBodyFromDict:@{
+//                              
+//                              @"title":@"hello",
+//                              @"body":@"BODYYYYY",
+//                              @"userId":@"1"
+//                              
+//                              }];
+//        [self.client makeRequest:request];
 }
 
 - (void)didReceiveMemoryWarning

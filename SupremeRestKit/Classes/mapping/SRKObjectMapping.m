@@ -110,8 +110,8 @@
     return self;
 }
 
--(instancetype)addStorageName:(NSString *)storageName{
-    self.storageName=storageName;
+-(instancetype)setStorageName:(NSString *)storageName{
+    self.customStorageName=storageName;
     return self;
 }
 
@@ -121,7 +121,7 @@
     
     [dictionary setValue:self.className forKey:kSRKClassName];
     [dictionary setValue:self.extends forKey:kSRKExtend];
-    [dictionary setValue:self.storageName forKey:kSRKStorageName];
+    [dictionary setValue:self.customStorageName forKey:kSRKStorageName];
     [dictionary setValue:self.keyPath forKey:kSRKKeyPath];
     [dictionary setValue:self.objectIdentifierKeyPath forKey:kSRKIndifiterKeyPath];
     [dictionary setValue:self.permanent forKey:kSRKPermanent];

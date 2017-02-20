@@ -42,7 +42,8 @@ SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"h
 [client makeRequest:
 [SRKRequest GETRequest:@"articles" urlParams:nil 
     mapping:
-        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] addObjectIdentifierKeyPath:@"id"]
+        [[[SRKObjectMapping mappingWithPropertiesArray:@[@"title"]] setIdentifierKeyPath:@"id"]
+        setStorageName:@"Article"]]
     andResponseBlock:^(SRKResponse *response) {
         NSArray * articlesList = [response objects];
         //articlesList have two objects type of SRKObject
@@ -53,8 +54,8 @@ You load list if articles stored them in articleList. Then you will load a detai
 ```objc
 [client makeRequest:[SRKRequest GETRequest:@"articles" urlParams:nil 
     mapping:[
-        [[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] 
-        addObjectIdentifierKeyPath:@"id"] 
+        [[[SRKObjectMapping mappingWithPropertiesArray:@[@"title",@"text"]] 
+        setIdentifierKeyPath:@"id"] setStorageName:@"Article"]
         addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:
             [SRKObjectMapping mappingWithProperties:@{@"username":@"username",@"id":@"objectId"}]
         ] 
@@ -74,6 +75,37 @@ Note, there is move simple way and elegant way to perform this task with SRKit
 ## Usage
 
 ### Basic
+```objc
+//define client
+SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
+//define mapping
+SRKObjectMapping * mapping = [SRKObjectMapping mappingWithPropertiesArray:@[@"title"]];
+//add id for mapping
+[mapping setIdentifierKeyPath:@"id"];
+/*set RAM storage name where you will store this type of object,
+not needed if you are using subclases**/
+[mapping setStorageName:@"Article"];
+//if you have a nested objects - add a relation with mapping
+SRKObjectMapping * nestedMapping = [SRKObjectMapping mappingWithProperties:
+@{
+@"id":@"objectId",// objectId - default indifiter key
+@"username":@"username"
+}];
+//RAM Storage Name for nested object
+[nestedMapping setStorageName:@"User"];
+//adding relation
+[mapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:nestedMapping];
+// or   [mapping addRelation:[SRKMappingRelation realtionWithFromKey:@"user" toKey:@"fromUser" mapping:mapping]];
+
+
+//create request
+SRKRequest * request = [SRKRequest GETRequest:@"articles" urlParams:nil mapping:mapping andResponseBlock:^(SRKResponse *response) {
+
+}];
+//make request
+[client makeRequest:request];
+```
+
 
 
 
