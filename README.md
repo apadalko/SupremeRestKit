@@ -116,11 +116,12 @@ Idea behind subclassing is that evry dynamic property meant to be a value from r
 @dynamic username;
 @end
 @interface Article :SRKObject
+@property (nonatomic,retain) User * fromUser;
 @property (nonatomic,retain)NSString * title;
 @property (nonatomic,retain)NSString * text;
 @end
 @implementation Article
-@dynamic title,text;
+@dynamic title,text,fromUser;
 @end
 //you can access property as normal
 user.username

@@ -18,11 +18,12 @@
 @dynamic username;
 @end
 @interface Article :SRKObject
+@property (nonatomic,retain) User * fromUser;
 @property (nonatomic,retain)NSString * title;
 @property (nonatomic,retain)NSString * text;
 @end
 @implementation Article
-@dynamic title,text;
+@dynamic title,text,fromUser;
 @end
 
 
