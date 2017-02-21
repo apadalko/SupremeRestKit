@@ -95,11 +95,11 @@
     return [self addRelation:[SRKMappingRelation realtionWithFromKey:fromKey toKey:toKey mapping:relationMapping]];
     
 }
--(instancetype)addObjectIdentifierKeyPath:(NSString *)keyPath{
+-(instancetype)setIdentifierKeyPath:(NSString *)keyPath{
     self.objectIdentifierKeyPath=keyPath;
     return  self;
 }
--(instancetype)addKeyPath:(NSString *)keyPath{
+-(instancetype)setMappingKeyPath:(NSString *)keyPath{
     self.keyPath=keyPath;
     return self;
 }
