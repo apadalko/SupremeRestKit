@@ -14,7 +14,6 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - DSObject (1.0.1)
   - Expecta (1.0.5)
   - Expecta+Snapshots (3.0.1):
     - Expecta (~> 1.0)
@@ -28,7 +27,6 @@ PODS:
   - Specta (1.0.6)
   - SupremeRestKit (1.0.0):
     - AFNetworking (~> 3.0)
-    - DSObject
 
 DEPENDENCIES:
   - Expecta
@@ -43,12 +41,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  DSObject: eb79bdb82555d59d6e1f4ce8ac1376deebca1cb4
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
   Expecta+Snapshots: aee0487f8bbb9df7e0b7735380565ac06207e959
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
-  SupremeRestKit: e3ba9b6081c97f5861d01f23776175660d0ef490
+  SupremeRestKit: 76222e225618b6166af91d9d23e359fbd341c22e
 
 PODFILE CHECKSUM: 7bf9140df210d70c7045873e047dae1803b3781e
 

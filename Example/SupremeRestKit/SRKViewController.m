@@ -36,13 +36,17 @@
 @end
 
 
-@interface TestObject : SRKObject_
+@interface TestObject : SRKObject
 
 @property (nonatomic,retain)NSString * k;
+
+@property (nonatomic,retain)NSString * d;
 @end
 @implementation TestObject
-@synthesize k=_k;
 
+-(void)setK:(NSString *)k{
+    [super setObject:k forKey:@"k"];
+}
 
 @end
 
@@ -130,7 +134,7 @@
     TestObject * t = [TestObject objectWithType:@"sss" andData:@{}];
     t.k = @"asda";
     t[@"k"] = @"asd";
-    
+     t.d = @"asda2";
     self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
 //        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
 //    SRKMappingRelation * r;
@@ -216,7 +220,7 @@
     SRKRequest * request = [[SRKRequest POSTRequest:@"posts" urlParams:nil mapping:postMapping andResponseBlock:^(SRKResponse *response) {
         
         
-        DSObject * post = [response first];
+        SRKObject * post = [response first];
         
         NSLog(@"%@",localPostObject);
 //        post[@"user"][@"username"]=@"somenewusername";

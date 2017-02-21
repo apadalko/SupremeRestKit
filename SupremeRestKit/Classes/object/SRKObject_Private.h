@@ -19,7 +19,7 @@ extern NSString *const kSRKIdentifier;
 -(instancetype)syncObject:(BOOL)isFetched associatedObjects:(NSArray*)objects;
 
 
-
+- (void)_setObject:(id)object forKey:(NSString *)key;
 
 
 #pragma mark -

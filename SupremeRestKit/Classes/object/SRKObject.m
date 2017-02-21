@@ -157,6 +157,94 @@ NSString *const kSRKIdentifier = @"identifier";
 
 #pragma mark - private methods
 
+
+- (void)_setObject:(id)object forKey:(NSString *)key {
+    
+    id val = [self _processValue:object forKey:key];
+    
+    if (self.locked) {
+        @synchronized (lock) {
+            self._data[key]=val;
+        }
+    }else{
+        self._data[key]=val;
+    }
+    
+    
+}
+
+-(id)_processValue:(id)val forKey:(NSString*)key{
+    
+    //    [[self objectController] ]
+    
+    SRKProperty* prop = [[self objectsManager] propertyForKey:key];
+    if (prop) {
+        
+        id value = val;
+        
+        Class propertyClass = prop.propertyClass;
+        
+        
+        if (propertyClass == [NSString class]) {
+            if ([value isKindOfClass:[NSNumber class]]) {
+                // NSNumber -> NSString
+                value = [value description];
+            } else if ([value isKindOfClass:[NSURL class]]) {
+                // NSURL -> NSString
+                value = [value absoluteString];
+            }
+        } else if ([value isKindOfClass:[NSString class]]) { //NSString
+            if (propertyClass == [NSURL class]) {
+                // NSString -> NSURL
+                value = [value urlFromString:val];
+            } else if (prop.isNumberType) {
+                NSString *oldValue = value;
+                
+                // NSString -> NSNumber
+                if (propertyClass == [NSDecimalNumber class]) {
+                    value = [NSDecimalNumber decimalNumberWithString:oldValue];
+                } else {
+                    value = [[SRKObject numberFormatter] numberFromString:oldValue];
+                }
+                
+                // BOOL
+                if (prop.isBoolType) {
+                    
+                    NSString *lower = [oldValue lowercaseString];
+                    if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
+                        value = @YES;
+                    } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
+                        value = @NO;
+                    }
+                }
+            }
+        } else if ([value isKindOfClass:[NSDictionary class]]&&[propertyClass isSubclassOfClass:[SRKProperty class]]){
+            return [propertyClass objectWithData:value];
+        }else  if (propertyClass==[NSDate class]) {
+            
+            if ([value isKindOfClass:[NSNumber class]]) {
+                
+                value = [NSDate dateWithTimeIntervalSince1970:[value integerValue]];
+            } else if ([value isKindOfClass:[NSURL class]]) {
+                // NSURL -> NSString
+                value = nil;
+            }
+        }
+        
+        
+        // duh...
+        if (propertyClass && ![value isKindOfClass:propertyClass]) {
+            value = nil;
+        }
+        
+        
+        return value;
+        
+        
+    }else
+        return val;
+}
+
 -(NSString *)_srk_objectType{
     NSString * storageName = [self storageName];
     
@@ -291,7 +379,27 @@ static NSNumberFormatter *_numberFormatter;
     return __data;
 }
 
-
+#pragma mark - val helpers temp
+- (NSURL *)urlFromString:(NSString*)string
+{
+    NSMutableString *output = [NSMutableString string];
+    const unsigned char *source = (const unsigned char *)[string UTF8String];
+    unsigned long sourceLen = strlen((const char *)source);
+    for (int i = 0; i < sourceLen; ++i) {
+        const unsigned char thisChar = source[i];
+        if (thisChar == ' '){
+            [output appendString:@"+"];
+        } else if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
+                   (thisChar >= 'a' && thisChar <= 'z') ||
+                   (thisChar >= 'A' && thisChar <= 'Z') ||
+                   (thisChar >= '0' && thisChar <= '9')) {
+            [output appendFormat:@"%c", thisChar];
+        } else {
+            [output appendFormat:@"%%%02X", thisChar];
+        }
+    }
+    return [NSURL URLWithString:output];
+}
 
 @end
 
@@ -301,77 +409,7 @@ static NSNumberFormatter *_numberFormatter;
 
 
 #pragma mark - private
--(id)_processValue:(id)val forKey:(NSString*)key{
-    
-    //    [[self objectController] ]
-    
-    SRKProperty* prop = [[self objectsManager] propertyForKey:key];
-    if (prop) {
-        
-        id value = val;
-        
-        Class propertyClass = prop.propertyClass;
-        
-        
-        if (propertyClass == [NSString class]) {
-            if ([value isKindOfClass:[NSNumber class]]) {
-                // NSNumber -> NSString
-                value = [value description];
-            } else if ([value isKindOfClass:[NSURL class]]) {
-                // NSURL -> NSString
-                value = [value absoluteString];
-            }
-        } else if ([value isKindOfClass:[NSString class]]) { //NSString
-            if (propertyClass == [NSURL class]) {
-                // NSString -> NSURL
-                value = [value urlFromString:val];
-            } else if (prop.isNumberType) {
-                NSString *oldValue = value;
-                
-                // NSString -> NSNumber
-                if (propertyClass == [NSDecimalNumber class]) {
-                    value = [NSDecimalNumber decimalNumberWithString:oldValue];
-                } else {
-                    value = [[SRKObject numberFormatter] numberFromString:oldValue];
-                }
-                
-                // BOOL
-                if (prop.isBoolType) {
-                    
-                    NSString *lower = [oldValue lowercaseString];
-                    if ([lower isEqualToString:@"yes"] || [lower isEqualToString:@"true"]) {
-                        value = @YES;
-                    } else if ([lower isEqualToString:@"no"] || [lower isEqualToString:@"false"]) {
-                        value = @NO;
-                    }
-                }
-            }
-        } else if ([value isKindOfClass:[NSDictionary class]]&&[propertyClass isSubclassOfClass:[SRKProperty class]]){
-            return [propertyClass objectWithData:value];
-        }else  if (propertyClass==[NSDate class]) {
-            
-            if ([value isKindOfClass:[NSNumber class]]) {
-                
-                value = [NSDate dateWithTimeIntervalSince1970:[value integerValue]];
-            } else if ([value isKindOfClass:[NSURL class]]) {
-                // NSURL -> NSString
-                value = nil;
-            }
-        }
-        
-        
-        // duh...
-        if (propertyClass && ![value isKindOfClass:propertyClass]) {
-            value = nil;
-        }
-        
-        
-        return value;
-        
-        
-    }else
-        return val;
-}
+
 #pragma mark
 
 -(void)removeObjectForKey:(NSString *)key{
@@ -393,24 +431,40 @@ static NSNumberFormatter *_numberFormatter;
     self[key] = value;
 }
 - (void)setObject:(id)object forKey:(NSString *)key {
+    
+    
+    NSString *sourceString = [[NSThread callStackSymbols] objectAtIndex:1];
+    // Example: 1   UIKit                               0x00540c89 -[UIApplication _callInitializationDelegatesForURL:payload:suspended:] + 1163
+    NSCharacterSet *separatorSet = [NSCharacterSet characterSetWithCharactersInString:@" -[]+?.,"];
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[sourceString  componentsSeparatedByCharactersInSet:separatorSet]];
+    [array removeObject:@""];
+    
+    NSLog(@"Stack = %@", [array objectAtIndex:0]);
+    NSLog(@"Framework = %@", [array objectAtIndex:1]);
+    NSLog(@"Memory address = %@", [array objectAtIndex:2]);
+    NSLog(@"Class caller = %@", [array objectAtIndex:3]);
+    NSLog(@"Function caller = %@", [array objectAtIndex:4]);
+    
+    NSString * _key = [NSString stringWithFormat:@"%C%@",
+     (unichar)toupper([key characterAtIndex:0]),
+                       [key substringFromIndex:1]];
+    
+    NSString * fullSelector = [NSString stringWithFormat:@"set%@:",_key];
+    
+    
+//    [NSInvocation invocationWithMethodSignature:<#(nonnull NSMethodSignature *)#>]
+//    
+//   NSMethodSignature *  s = [NSMethodSignature methodForSelector:NSSelectorFromString([NSString stringWithFormat:@"set%@",_key])];
+//    
+//    [self ]
+//    
+//    [self performSelector:NSSelectorFromString(fullSelector) withObject:object];
+    
     [self _setObject:object forKey:key];
 }
 
 
-- (void)_setObject:(id)object forKey:(NSString *)key {
-    
-    id val = [self _processValue:object forKey:key];
-    
-    if (self.locked) {
-        @synchronized (lock) {
-            self._data[key]=val;
-        }
-    }else{
-        self._data[key]=val;
-    }
-    
-    
-}
+
 
 
 -(void)setKeyValues:(NSDictionary *)keyValues{
@@ -472,27 +526,7 @@ static NSNumberFormatter *_numberFormatter;
         return newArr;
     }else return val;
 }
-#pragma mark - val helpers temp
-- (NSURL *)urlFromString:(NSString*)string
-{
-    NSMutableString *output = [NSMutableString string];
-    const unsigned char *source = (const unsigned char *)[string UTF8String];
-    unsigned long sourceLen = strlen((const char *)source);
-    for (int i = 0; i < sourceLen; ++i) {
-        const unsigned char thisChar = source[i];
-        if (thisChar == ' '){
-            [output appendString:@"+"];
-        } else if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
-                   (thisChar >= 'a' && thisChar <= 'z') ||
-                   (thisChar >= 'A' && thisChar <= 'Z') ||
-                   (thisChar >= '0' && thisChar <= '9')) {
-            [output appendFormat:@"%c", thisChar];
-        } else {
-            [output appendFormat:@"%%%02X", thisChar];
-        }
-    }
-    return [NSURL URLWithString:output];
-}
+
 @end
 
 

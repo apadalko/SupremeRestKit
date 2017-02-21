@@ -280,7 +280,7 @@ static NSMutableDictionary * _objectsManagers;
     if (dictionaryValue == nil) {
         [sourceObject removeObjectForKey:property.propertyName];
     } else {
-        sourceObject[property.propertyName] = dictionaryValue;
+        [sourceObject _setObject:dictionaryValue forKey:property.propertyName];
     }
 }
 

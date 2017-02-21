@@ -6,8 +6,6 @@
 //
 //
 
-#import <DSObject/DSObject.h>
-
-@interface SRKObject_ : DSObject
+@interface SRKObject_ : NSObject
 
 @end
