@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)shared;
 
 -(void)registerClinet:(SRKClient*)clinet withName:(NSString*)name;
--(SRKClient*)getClinetWithName:(NSString*)name;
+-(nullable SRKClient*)getClinetWithName:(NSString*)name;
 
 @end
 NS_ASSUME_NONNULL_END
