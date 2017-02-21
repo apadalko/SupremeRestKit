@@ -106,9 +106,13 @@
     
     
     ///
-    SRKObjectMapping * articleMapping = [Article mappingWithProperties:@{@"title":@"title",@"id":@"objectId"}];
-    SRKObjectMapping * userMapping = [User mappingWithPropertiesArray:@[@"username"] indfiterKeyPath:@"id"];
+    SRKObjectMapping * articleMapping = [[Article mapping]
+     setPropertiesFromDictionary:@{@"title":@"title",@"id":@"objectId"}];
+    SRKObjectMapping * userMapping = [[[User mapping]
+      setPropertiesFromArray:@[@"username"]] setIdentifierKeyPath:@"id"];
     [articleMapping addRelationFromKey:@"user" toKey:@"fromUser" relationMapping:userMapping];
+
+   
     
     
     
