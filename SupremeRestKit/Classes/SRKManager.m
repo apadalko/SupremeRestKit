@@ -16,7 +16,7 @@ static SRKManager * sharedManager;
 +(instancetype)shared{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedManager = [[SRKClient alloc] init];
+        sharedManager = [[self alloc] init];
     });
     
     return sharedManager;
