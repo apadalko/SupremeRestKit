@@ -11,11 +11,11 @@
 
 @interface SRKResponse : NSObject
 
-@property (nonatomic,retain)NSArray * objects;
--(SRKObject*)first;
+@property (nonatomic,retain,nullable)NSArray * objects;
+-(nullable SRKObject*)first;
 
-@property (nonatomic,retain)NSError * error;
-@property (nonatomic,retain)id rawData;
+@property (nonatomic,retain,nullable)NSError * error;
+@property (nonatomic,retain,nullable)id rawData;
 @property (nonatomic)BOOL success;
 
 @end
