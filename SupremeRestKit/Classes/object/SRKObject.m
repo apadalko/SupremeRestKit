@@ -532,27 +532,124 @@ static NSNumberFormatter *_numberFormatter;
 
 
 @implementation SRKObject (SRKMapping)
-+(SRKObjectMapping *)mappingExtends:(NSString *)extend{
-    return [[SRKObjectMapping mappingExtends:extend] setMappingObjectType:[self class]];
-}
++(SRKObjectMapping *)mapping{
+    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
 
-
-+(SRKObjectMapping *)mappingWithProperties:(NSDictionary *)props{
-    return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
-}
-
-+(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return  [[SRKObjectMapping mappingWithProperties:props  indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
-}
-
-
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props{
-    return [[SRKObjectMapping mappingWithPropertiesArray:props] setMappingObjectType:[self class]];
-}
-
-+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props indfiterKeyPath:(NSString *)indifiterKeyPath{
-    return [SRKObjectMapping mappingWithPropertiesArray:props  indfiterKeyPath:indifiterKeyPath];
+   SRKObjectMapping * mapping =  [[SRKObjectMapping alloc] init];
+    [mapping setMappingObjectType:[self class]];
+    return mapping;
 }
 
 @end
+//+(SRKObjectMapping *)mappingExtends:(NSString *)extend{
+//    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
+//
+//    return [[SRKObjectMapping mappingExtends:extend] setMappingObjectType:[self class]];
+//}
+//
+//
+//+(SRKObjectMapping *)mappingWithProperties:(NSDictionary *)props{
+//    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
+//
+//    return [[SRKObjectMapping mappingWithProperties:props] setMappingObjectType:[self class]];
+//}
+//
+//+(SRKObjectMapping*)mappingWithProperties:(NSDictionary *)props  indfiterKeyPath:(NSString *)indifiterKeyPath{
+//    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
+//
+//    return  [[SRKObjectMapping mappingWithProperties:props  indfiterKeyPath:indifiterKeyPath] setMappingObjectType:[self class]];
+//}
+//
+//
+//+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props{
+//    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
+//
+//    return [[SRKObjectMapping mappingWithPropertiesArray:props] setMappingObjectType:[self class]];
+//}
+//
+//+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray *)props indfiterKeyPath:(NSString *)indifiterKeyPath{
+//    SRKAssert(self != [SRKObject class], @"Available only for subclasses");
+//
+//    return [SRKObjectMapping mappingWithPropertiesArray:props  indfiterKeyPath:indifiterKeyPath];
+//}
+
+///**
+// Creates a new Object Mapping with propeties listed in array , u able to rename them by using arrow "->" ex @[@"full_name->fullName",...]
+// 
+// @param props    properties listed in Array.
+// 
+// @return new Mapping Object ready for mapping.
+// 
+// @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+// @note you able to rename properies by using arrow symbol "->" ex : @["id->objectId","name->username","bio","age","full_name->fullName"]
+// 
+// @warning availavle only for subclasses
+// 
+// */
+//+(instancetype)mappingWithPropertiesArray:(NSArray*)props;
+//
+//
+///**
+// Creates a new Object Mapping with propeties listed in array by specific key path and indifiter , u able to rename them by using arrow "->" ex @[@"full_name->fullName",...]
+// 
+// @param props     properties listed in Array.
+// @param indifiterKeyPath   using to map objectId from given data
+// 
+// @return new Mapping Object ready for mapping.
+// 
+// @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+// @note you able to rename properies by using arrow symbol "->" ex : @["id->objectId","name->username","bio","age","full_name->fullName"]
+// @note use this initialized if u didn't plan to map objectId in propertiesArray
+// 
+// @warning availavle only for subclasses
+// 
+// */
+//+(SRKObjectMapping *)mappingWithPropertiesArray:(NSArray*)props indfiterKeyPath:(NSString*)indifiterKeyPath;;
+//
+///**
+// Creates a new Object Mapping with properties listed in dictionary {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`
+// 
+// @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
+// 
+// @return new Mapping Object ready for mapping.
+// 
+// @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+// 
+// @warning availavle only for subclasses
+// 
+// */
+//+(SRKObjectMapping *)mappingWithProperties:(NSDictionary*)props;
+//
+//
+///**
+// Creates a new Object Mapping with properties listed in dictionary ( {"K":"V"} where K is key in given data and V is property name in resulting object `SRKObject`)  with indifiter key
+// 
+// @param props    properties in Dictionary. Key is value in given data, Value is name of the property in resulting object for ex {"full_name":"lala","id":"222"} so the properties dictionaty will look like this {"full_name":"fullName","id":"objectId"}
+// @param indifiterKeyPath   using to map objectId from given data
+// 
+// @return new Mapping Object ready for mapping.
+// 
+// @note all listed properties may be served as keypathes. Just use stadart "." syntax as "post.fromUser"
+// @note use this initialized if u didn't plan to map objectId in properties dictionary
+// 
+// @warning availavle only for subclasses
+// 
+// */
+//+(SRKObjectMapping *)mappingWithProperties:(NSDictionary*)props  indfiterKeyPath:(NSString*)indifiterKeyPath;
+//
+///**
+// Creates a new Object Mapping extended form another mapping in a current Mapping Scope
+// 
+// @param extend    name of another the mapping in a current mapping scope
+// 
+// @return new Mapping Object ready for mapping.
+// 
+// @note all properties would be extended from 'Super' Mapping
+// @note see -addMapping:withName: in `SRKMappingScope`
+// 
+// @warning availavle only for subclasses
+// 
+// */
+//+(SRKObjectMapping *)mappingExtends:(NSString*)extend;
+
 

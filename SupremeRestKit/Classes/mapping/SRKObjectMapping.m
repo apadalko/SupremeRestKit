@@ -77,7 +77,11 @@
     self.properties=propsDict;
 }
 
-
+-(instancetype)extendsMappingByName:(NSString *)extends{
+    
+    self.extends=extends;
+    return  self;
+}
 -(instancetype)addRelation:(SRKMappingRelation*)relation{
     if (!_relations) {
         _relations=[[NSMutableDictionary alloc] init];

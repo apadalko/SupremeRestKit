@@ -226,6 +226,15 @@
  */
 -(instancetype)addPermanentProperty:(NSString*)key value:(id)value;
 
+
+/**
+ sets the  name of the extended mapping
+ 
+ @param keyPath    name of the extended mapping
+ 
+ @return current Mapping Object.
+ */
+-(instancetype)extendsMappingByName:(NSString*)extends;
 /**
  sets the key path in data (Dictionary) where resulting object should take data
  
