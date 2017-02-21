@@ -184,7 +184,14 @@ NSString *const kSRKIdentifier = @"identifier";
         
         Class propertyClass = prop.propertyClass;
         
-        
+        if (propertyClass==[NSDate class]) {
+            
+            if ([value isKindOfClass:[NSNumber class]]) {
+                
+                value = [NSDate dateWithTimeIntervalSince1970:[value integerValue]];
+            }
+        }
+        else
         if (propertyClass == [NSString class]) {
             if ([value isKindOfClass:[NSNumber class]]) {
                 // NSNumber -> NSString
@@ -220,17 +227,10 @@ NSString *const kSRKIdentifier = @"identifier";
             }
         } else if ([value isKindOfClass:[NSDictionary class]]&&[propertyClass isSubclassOfClass:[SRKProperty class]]){
             return [propertyClass objectWithData:value];
-        }else  if (propertyClass==[NSDate class]) {
-            
-            if ([value isKindOfClass:[NSNumber class]]) {
-                
-                value = [NSDate dateWithTimeIntervalSince1970:[value integerValue]];
-            } else if ([value isKindOfClass:[NSURL class]]) {
-                // NSURL -> NSString
-                value = nil;
-            }
-        }
-        
+        }  //        else if ([value isKindOfClass:[NSURL class]]) {
+//            // NSURL -> NSString
+//            value = nil;
+//        }
         
         // duh...
         if (propertyClass && ![value isKindOfClass:propertyClass]) {
