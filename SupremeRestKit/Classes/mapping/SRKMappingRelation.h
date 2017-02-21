@@ -10,6 +10,7 @@
 @class SRKObject;
 @class SRKObjectMapping;
 
+NS_ASSUME_NONNULL_BEGIN
 /**
  A block that validates current relation
  
@@ -32,7 +33,7 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,SRKObject * p
  
  @return new Mapping Relation.
  */
--(instancetype)initWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
+-(instancetype)initWithFromKey:( nullable NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
 
 /**
  Creates a new Mapping Relation
@@ -42,13 +43,13 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,SRKObject * p
  
  @return new Mapping Relation.
  */
-+(instancetype)realtionWithFromKey:(NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
++(instancetype)realtionWithFromKey:(nullable NSString*)fromKey toKey:(NSString*)toKey mapping:(SRKObjectMapping *)mapping;
 
 
 /**
  key in data
  */
-@property (nonatomic,retain)NSString * fromKey;
+@property (nonatomic,retain,nullable)NSString * fromKey;
 /**
  key in object(object property)
  */
@@ -77,3 +78,4 @@ typedef BOOL (^SRKMappingRelationValidateBlock) (NSDictionary*data,SRKObject * p
 
 
 @end
+NS_ASSUME_NONNULL_END

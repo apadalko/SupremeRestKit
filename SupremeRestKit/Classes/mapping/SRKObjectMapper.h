@@ -10,6 +10,7 @@
 #import "SRKObjectMapping.h"
 #import "SRKMappingScope.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  SRKObjectMapper is used to map data (Dictionary) to a some `SRKObject`
@@ -40,7 +41,7 @@
  
  @note even if u parsing single object - there alway will be an array in complitBlock
  */
--(void)processDataInBackground:(NSDictionary*)data forMapping:(id)maping complitBlock:(void(^)(NSArray * result))complitBlock;
+-(void)processDataInBackground:(NSDictionary*)data forMapping:(id)maping complitBlock:(void(^)(NSArray<SRKObject*> * result))complitBlock;
 
 
 
@@ -58,7 +59,7 @@
  @note will use the default mapping scope, if you still want not to use mapping scope at all call +processDataInBackground:withScope:forMapping:complitBlock: with nil value for scope
  @note even if u parsing single object - there alway will be an array in complitBlock
  */
-+(void)processDataInBackground:(NSDictionary*)data forMapping:(id)maping complitBlock:(void(^)(NSArray * result))complitBlock;
++(void)processDataInBackground:(NSDictionary*)data forMapping:(id)maping complitBlock:(void(^)(NSArray<SRKObject*> * result))complitBlock;
 
 
 /**
@@ -71,7 +72,9 @@
  
  @note even if u parsing single object - there alway will be an array in complitBlock
  */
-+(void)processDataInBackground:(NSDictionary*)data withScope:(SRKMappingScope*)scope forMapping:(id)maping complitBlock:(void(^)(NSArray * result))complitBlock;
++(void)processDataInBackground:(NSDictionary*)data withScope:(SRKMappingScope*)scope forMapping:(id)maping complitBlock:(void(^)(NSArray<SRKObject*> * result))complitBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
