@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SRKResponse.h"
 #import "SRKMultipart.h"
+NS_ASSUME_NONNULL_BEGIN
 typedef void (^SRKResponseBlock) (SRKResponse  * response);
 typedef NS_ENUM(NSInteger,SRKRequestMethod){
     
@@ -20,18 +21,19 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
     SRKRequestMethodPATCH,
     
 };
+
 @interface SRKRequest : NSObject
 
 
 
-+(instancetype)GETRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-+(instancetype)POSTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-+(instancetype)DELETERequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
-+(instancetype)PUTRequest:(NSString*)url urlParams:(id)urlParams mapping:(id)mapping andResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
++( instancetype)GETRequest:(nullable NSString* )url urlParams:(nullable id)urlParams mapping:(nullable id)mapping andResponseBlock:(void(^)(SRKResponse  *  response))responseBlock;
++(  instancetype)POSTRequest:(nullable NSString*)url urlParams:(nullable id)urlParams mapping:(nullable id)mapping andResponseBlock:(void(^)(SRKResponse  *  response))responseBlock;
++(  instancetype)DELETERequest:(nullable NSString*)url urlParams:(nullable id)urlParams mapping:(nullable id)mapping andResponseBlock:(void(^)(SRKResponse  *  response))responseBlock;
++(  instancetype)PUTRequest:(nullable NSString*)url urlParams:(nullable id)urlParams mapping:(nullable id)mapping andResponseBlock:(void(^)(SRKResponse  *  response))responseBlock;
 
 
 
--(instancetype)initWithMethod:(SRKRequestMethod)method urlParams:(NSString*)urlParams  params:(id)params  mapping:(id)mapping responseBlock:(void(^)(SRKResponse  * response))responseBlock;
+-(instancetype)initWithMethod:(SRKRequestMethod)method urlParams:(nullable NSString*)urlParams  params:(nullable id)params  mapping:(nullable id)mapping responseBlock:(void(^)(SRKResponse  * response))responseBlock;
 
 
 
@@ -45,6 +47,7 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
 -(instancetype)addResponseBlock:(void(^)(SRKResponse  * response))responseBlock;
 
 -(instancetype)addMultipart:(SRKMultipart*)multipart;
--(NSArray*)multiparts;
+-(nullable NSArray*)multiparts;
 
 @end
+NS_ASSUME_NONNULL_END
