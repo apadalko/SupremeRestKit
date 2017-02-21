@@ -24,7 +24,7 @@
 
 
 -(instancetype)initWithBaseURL:(NSURL *)url{
-   return [self initWithBaseURL:url andScope:[SRKMappingScope defaultScope]];
+    return [self initWithBaseURL:url andScope:[SRKMappingScope defaultScope]];
 }
 -(instancetype)initWithBaseURL:(NSURL *)url andScope:(SRKMappingScope*)scope{
     if (self=[super init]) {
@@ -33,8 +33,11 @@
         
         self.sessionManager=[[AFHTTPSessionManager alloc] initWithBaseURL:url];
         
+        [self.sessionManager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html",@"*/*", nil]];
         AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
+        
         [serializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+        [serializer setValue:@"*/*" forHTTPHeaderField:@"Accept"];
         [serializer setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
         serializer.timeoutInterval = 20.0;
         [self.sessionManager setRequestSerializer:serializer];
@@ -68,29 +71,39 @@
 
 #pragma mark - work
 
--(void)makeRequest:(SRKRequest *)request{
-
+-(void)makeRequest:(SRKRequest *)_request{
+    
+    
+    
+    SRKRequest * request = _request;
+    
     
     
     
     NSError *serializationError = nil;
     NSMutableURLRequest * urlRequest = [request generateRequestWithBaseURL:self.sessionManager.baseURL serializer:[self.sessionManager requestSerializer] error:&serializationError];
+    
+    SRKResponseBlock responseBlock =   request.responseBlock;
+    
     if (serializationError) {
-
         
-//        return nil;
+        
+        //        return nil;
     }else{
         __block NSURLSessionDataTask *dataTask = nil;
+        __weak SRKClient *  weakSelf = self;
         dataTask = [self.sessionManager dataTaskWithRequest:urlRequest
                                              uploadProgress:nil
                                            downloadProgress:nil
                                           completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+                                              
                                               if (error) {
                                                   
-                                                  [self _processError:error withTask:dataTask responseBlock:request.responseBlock];
+                                                  [weakSelf _processError:error withTask:dataTask responseBlock:responseBlock];
                                                   
                                               } else {
-                                                  [self _processSuccess:responseObject urlPattern:request.urlPath mappings:request.mapping responseBlock:request.responseBlock];
+                                                  
+                                                  [weakSelf _processSuccess:responseObject urlPattern:[request.urlPath copy] mappings:request.mapping responseBlock:request.responseBlock];
                                               }
                                           }];
         
@@ -98,145 +111,11 @@
         [dataTask resume];
     }
     
-
-
     
     
     
     
     
-    
-    
-    
-    
-    
-    
-    
-//    if (request.method==SRKRequestMethodGET){
-//        [self _GET:request.urlPath params:request.urlParams mappings:request.mapping responseBlock:request.responseBlock];
-//    }else if (request.method==SRKRequestMethodPOST){
-//        
-//        [self _POST:request.urlPath  params:request.urlParams body:request.body mappings:request.mapping multiparts:[request multiparts] responseBlock:request.responseBlock];
-//    }else if (request.method==SRKRequestMethodPUT){
-//        
-//        [self _PUT:request.urlPath  params:request.urlParams body:request.body mappings:request.mapping multiparts:[request multiparts] responseBlock:request.responseBlock];
-//    }else if (request.method==SRKRequestMethodDELETE){
-//        
-//        [self _DELETE:request.urlPath  params:request.urlParams body:request.body mappings:request.mapping multiparts:[request multiparts] responseBlock:request.responseBlock];
-//    }
-    
-    
-}
--(void)_DELETE:(NSString*)url params:(NSDictionary*)params body:(NSDictionary*)body mappings:(id)mappings multiparts:(NSArray*)multiparts responseBlock:(SRKResponseBlock)responseBlock{
-    
-    [self.sessionManager DELETE:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self _processError:error withTask:task responseBlock:responseBlock];
-    }];
-}
--(void)_POST:(NSString*)url params:(NSDictionary*)params body:(NSDictionary*)body mappings:(id)mappings multiparts:(NSArray*)multiparts responseBlock:(SRKResponseBlock)responseBlock{
-    
-    NSString * fullUrl ;
-    if (!params) {
-        fullUrl=url;
-    }else{
-        NSString * k =  AFQueryStringFromParameters(params);
-        fullUrl= [NSString stringWithFormat:@"%@?%@",url,k];
-    }
-    __block NSArray * mp = multiparts;
-    
-    if (multiparts.count>0) {
-        
-        
-        [self.sessionManager POST:fullUrl parameters:body constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-            
-            for (SRKMultipart * p in mp) {
-                [formData appendPartWithFileData:[p data] name:[p name] fileName:[p fileName] mimeType:[p mimeType]];
-            }
-            
-        } progress:^(NSProgress * _Nonnull uploadProgress) {
-            
-        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            
-            //            dispatch_async(self.workQueue, ^{
-            [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-            //            });
-            
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [self _processError:error withTask:task responseBlock:responseBlock];
-        }];
-    }else{
-        [self.sessionManager POST:fullUrl parameters:body progress:^(NSProgress * _Nonnull uploadProgress) {
-            
-        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            
-            //            dispatch_async(self.workQueue, ^{
-            [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-            //            });
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [self _processError:error withTask:task responseBlock:responseBlock];
-            
-        }];
-    }
-    
-    
-    
-}
--(void)_PUT:(NSString*)url params:(NSDictionary*)params body:(NSDictionary*)body mappings:(id)mappings multiparts:(NSArray*)multiparts responseBlock:(SRKResponseBlock)responseBlock{
-    NSString * fullUrl ;
-    if (!params) {
-        fullUrl=url;
-    }else{
-        NSString * k =  AFQueryStringFromParameters(params);
-        fullUrl= [NSString stringWithFormat:@"%@?%@",url,k];
-    }
-    __block NSArray * mp = multiparts;
-    
-    if (multiparts.count>0) {
-        
-        id req = [self.sessionManager.requestSerializer multipartFormRequestWithMethod:@"PUT" URLString:[NSString stringWithFormat:@"%@%@",[self.sessionManager.baseURL absoluteString],url] parameters:body constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-            for (SRKMultipart * p in mp) {
-                [formData appendPartWithFileData:[p data] name:[p name] fileName:[p fileName] mimeType:[p mimeType]];
-            }
-        } error:nil];
-        
-        
-        
-        NSURLSessionDataTask * task =   [self.sessionManager dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            
-            if (error) {
-                [self _processError:error withTask:task responseBlock:responseBlock];
-                
-            }else{
-                [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-            }
-            
-        }];
-        [task resume];
-    }else{
-        
-        [self.sessionManager PUT:fullUrl parameters:body success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [self _processError:error withTask:task responseBlock:responseBlock];
-        }];
-    }
-    
-    
-    
-}
--(void)_GET:(NSString*)url params:(NSDictionary*)params mappings:(id)mappings responseBlock:(SRKResponseBlock)responseBlock{
-    [self.sessionManager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //        dispatch_async(self.workQueue, ^{
-        [self _processSuccess:responseObject urlPattern:url mappings:mappings responseBlock:responseBlock];
-        //        });
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self _processError:error withTask:task responseBlock:responseBlock];
-    }];
     
 }
 
@@ -251,7 +130,10 @@
             response.success=YES;
             response.objects=result;
             response.rawData=responseObject;
-            responseBlock(response);
+            if (responseBlock) {
+                responseBlock(response);
+            }
+            
             //            });
             
         }

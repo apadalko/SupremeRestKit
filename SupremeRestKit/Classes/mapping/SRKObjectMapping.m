@@ -75,6 +75,7 @@
         [propsDict setValue:[props valueForKey:k] forKey:k];
     }
     self.properties=propsDict;
+    return self;
 }
 
 -(instancetype)extendsMappingByName:(NSString *)extends{
