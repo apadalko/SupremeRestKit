@@ -188,29 +188,17 @@ static dispatch_queue_t _workQueueForStatic;
 
 +(void)proccessRelation:(id)relation forKey:(NSString*)key inObject:(SRKObject*)obj withData:(NSDictionary*)data fetched:(BOOL)fetched{
     
-    NSArray * p = [key componentsSeparatedByString:@"->"];
-    if (p.count!=2) {
-        return;
-    }
-    id subData = nil;
-    if ([[p firstObject] length]>0) {
-        subData = [data valueForKeyPath:[p firstObject]];
-    }else{
-        subData=data;
-    }
-    if (!subData) {
-        return;
-    }
-    
-    id d = relation;
-    NSString * toKey = [p lastObject];
     
     
     
-    if ([d isKindOfClass:[SRKObjectMapping class]]) {
-        SRKObjectMapping *  rel = d;
-//        [rel setFetched:fetched];
-        
+    if ([relation isKindOfClass:[SRKMappingRelation class]]){
+        SRKMappingRelation * relationObject;
+           id subData = nil;
+        if ([relationObject fromKey ]) {
+            subData = [data valueForKeyPath:[relation fromKey]];
+        }else {
+            subData = data;
+        }
         
         
         if ([subData isKindOfClass:[NSArray class]]) {
@@ -218,31 +206,77 @@ static dispatch_queue_t _workQueueForStatic;
             NSMutableArray * result = [[NSMutableArray alloc] init];
             
             for (id subArrVal in subData) {
-                SRKObject * subObject  = [self __processData:subArrVal forMapping:rel fetched:fetched];
+                SRKObject * subObject  = [self __processData:subArrVal forMapping:[relationObject mapping] fetched:fetched];
                 if (subObject) {
                     [result addObject:subObject];
                 }
             }
-            [obj setObject:result forKey:toKey];
+            [obj setObject:result forKey:[relationObject toKey]];
         }else{
-            SRKObject * subObject  = [self __processData:subData forMapping:rel fetched:fetched] ;
-            [obj setObject:subObject forKey:toKey];
+            SRKObject * subObject  = [self __processData:subData forMapping:[relationObject mapping] fetched:fetched] ;
+            [obj setObject:subObject forKey:[relationObject toKey]];
         }
         
         
-    }else if ([d isKindOfClass:[NSDictionary class]]){
-        NSMutableDictionary * md =[[NSMutableDictionary alloc] init];
-        for (NSString * k  in d) {
+    }else {
+        NSArray * p = [key componentsSeparatedByString:@"->"];
+        if (p.count<1) {
+            return;
+        }
+        id subData = nil;
+        if ([[p firstObject] length]>0) {
+            subData = [data valueForKeyPath:[p firstObject]];
+        }else{
+            subData=data;
+        }
+        if (!subData) {
+            return;
+        }
+        
+        id d = relation;
+        NSString * toKey = [p lastObject];
+        
+        
+        
+        if ([d isKindOfClass:[SRKObjectMapping class]]) {
+            SRKObjectMapping *  rel = d;
+            //        [rel setFetched:fetched];
             
-            id val =   [subData valueForKeyPath:k];
-            if (val&&![val isEqual:[NSNull null]]) {
-                [md setValue:val forKey:k];
+            
+            
+            if ([subData isKindOfClass:[NSArray class]]) {
+                
+                NSMutableArray * result = [[NSMutableArray alloc] init];
+                
+                for (id subArrVal in subData) {
+                    SRKObject * subObject  = [self __processData:subArrVal forMapping:rel fetched:fetched];
+                    if (subObject) {
+                        [result addObject:subObject];
+                    }
+                }
+                [obj setObject:result forKey:toKey];
+            }else{
+                SRKObject * subObject  = [self __processData:subData forMapping:rel fetched:fetched] ;
+                [obj setObject:subObject forKey:toKey];
             }
             
+            
+        }else if ([d isKindOfClass:[NSDictionary class]]){
+            NSMutableDictionary * md =[[NSMutableDictionary alloc] init];
+            for (NSString * k  in d) {
+                
+                id val =   [subData valueForKeyPath:k];
+                if (val&&![val isEqual:[NSNull null]]) {
+                    [md setValue:val forKey:k];
+                }
+                
+            }
+            
+            [obj setObject:md forKey:toKey];
         }
-        
-        [obj setObject:md forKey:toKey];
     }
+    
+   
     
 }
 
