@@ -130,8 +130,8 @@ static dispatch_queue_t _workQueueForStatic;
     }
     
     SRKObject * rkObject = [cl objectWithType:mapping.customStorageName andData:nil];
-
-
+    
+    
     NSDictionary * properties = [mapping properties];
     for (NSString * prop in properties) {
         id val = [data valueForKeyPath:prop];
@@ -173,9 +173,9 @@ static dispatch_queue_t _workQueueForStatic;
         
         
     }
-
     
-   
+    
+    
     
     NSDictionary * permanent =[mapping valueForKey:@"permanent"];
     for (NSString * perpProp in permanent) {
@@ -192,10 +192,10 @@ static dispatch_queue_t _workQueueForStatic;
     
     
     if ([relation isKindOfClass:[SRKMappingRelation class]]){
-        SRKMappingRelation * relationObject;
-           id subData = nil;
+        SRKMappingRelation * relationObject = relation;
+        id subData = nil;
         if ([relationObject fromKey ]) {
-            subData = [data valueForKeyPath:[relation fromKey]];
+            subData = [data valueForKeyPath:[relationObject fromKey]];
         }else {
             subData = data;
         }
@@ -276,7 +276,7 @@ static dispatch_queue_t _workQueueForStatic;
         }
     }
     
-   
+    
     
 }
 
