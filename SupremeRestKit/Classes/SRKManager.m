@@ -24,7 +24,7 @@ static SRKManager * sharedManager;
 
 -(void)registerClient:(SRKClient *)client withName:(NSString *)name{
     
-    [self.clinets setValue:clinet forKey:name];
+    [self.clinets setValue:client forKey:name];
 }
 -(SRKClient *)getClientWithName:(NSString *)name{
     return self.clinets[name];
