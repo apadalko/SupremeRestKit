@@ -92,6 +92,7 @@
     }else{
         __block NSURLSessionDataTask *dataTask = nil;
         __weak SRKClient *  weakSelf = self;
+        
         dataTask = [self.sessionManager dataTaskWithRequest:urlRequest
                                              uploadProgress:nil
                                            downloadProgress:nil

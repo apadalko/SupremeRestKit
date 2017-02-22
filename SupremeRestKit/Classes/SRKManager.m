@@ -22,11 +22,11 @@ static SRKManager * sharedManager;
     return sharedManager;
 }
 
--(void)registerClinet:(SRKClient *)clinet withName:(NSString *)name{
+-(void)registerClient:(SRKClient *)client withName:(NSString *)name{
     
     [self.clinets setValue:clinet forKey:name];
 }
--(SRKClient *)getClinetWithName:(NSString *)name{
+-(SRKClient *)getClientWithName:(NSString *)name
     return self.clinets[name];
 }
 
