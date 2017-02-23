@@ -12,21 +12,37 @@
 #import "SRKRequest.h"
 #import "SRKMappingScope.h"
 #import "SRKObjectMapper.h"
+#import "SRKRequestOperation.h"
+
+#import <AFNetworking/AFNetworking.h>
 @class SRKClient;
 
-typedef NSError  * _Nullable (^SRKErrorProccessingBlock) (NSError * _Nonnull error,NSURLSessionTask * _Nonnull task);
+
 
 @interface SRKClient : NSObject
 
 -(instancetype)initWithBaseURL:(NSURL *)url;
 -(instancetype)initWithBaseURL:(NSURL *)url andScope:(SRKMappingScope*)scope;
 
--(void)makeRequest:(SRKRequest * _Nonnull)request;
+-(SRKRequest*)makeRequest:(SRKRequest * _Nonnull)request;
 -(void)setMappingScope:(SRKMappingScope * _Nonnull)mappingScope;
 
 @property (nonnull,retain,nonatomic)SRKObjectMapper * objectMapper;
 @property (nonatomic,copy)_Nullable SRKErrorProccessingBlock errorProcessingBLock;
 
+
+
+@property (nonatomic)NSInteger mainQueueAsyncSize; // 10
+
+
+
+
+-(AFHTTPResponseSerializer*)responseSerializer;
+-(void)setResponseSerializer:(AFHTTPRequestSerializer*)responseSerializer;
+
+
+-(AFHTTPRequestSerializer*)requestSerialized;
+-(void)setReuqestSerializer:(AFHTTPRequestSerializer*)requestSerializer;
 
 
 @end

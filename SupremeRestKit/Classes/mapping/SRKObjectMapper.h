@@ -10,6 +10,8 @@
 #import "SRKObjectMapping.h"
 #import "SRKMappingScope.h"
 
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -31,6 +33,21 @@ NS_ASSUME_NONNULL_BEGIN
  @return new Object Mapper
  */
 -(instancetype)initWithScope:(SRKMappingScope*)scope;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  parsing given data in background

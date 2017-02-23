@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SRKObject.h"
+@class SRKObject;
 
 @interface SRKResponse : NSObject
 

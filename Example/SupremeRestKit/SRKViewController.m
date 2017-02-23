@@ -9,7 +9,7 @@
 #import "SRKViewController.h"
 #import <SupremeRestKit/SRKObjectMapping.h>
 #import <SupremeRestKit/SRKClient.h>
-#import <SupremeRestKit/SRKObject_.h>
+#import <SupremeRestKit/SRKObject.h>
 
 @interface User : SRKObject
 @property (nonatomic,retain) NSString * username;
@@ -126,20 +126,95 @@
 //    }]];
     
 }
+-(void)lala{
+    [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST");
+        
+    }]];
+    
+    [ self.client makeRequest:[SRKRequest GETRequest:@"search/3" urlParams:@{@"lat":@(0),
+                                                                             @"lon":@(0),
+                                                                             @"name":@"alex",
+                                                                             @"skip":@""} mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+                                                                                 
+                                                                                 NSLog(@"DONE MATCH");
+                                                                                 
+                                                                                                                                                }]];
+    
+          [self bbb] ;
+}
 
+-(void)bbb{
+    [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST");
+        
+    }]];
+    
+    [ self.client makeRequest:[SRKRequest GETRequest:@"search/3" urlParams:@{@"lat":@(0),
+                                                                             @"lon":@(0),
+                                                                             @"name":@"alex",
+                                                                             @"skip":@""} mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+                                                                                 
+                                                                                 NSLog(@"DONE MATCH");
+                                                                                 
+                                                                             }]];
+}
+
+-(void)t{
+    [self.client makeRequest:nil];
+}
+static    NSTimer * ttt;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+//ttt = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(t) userInfo:nil repeats:YES];
+//    [ttt fire];
+    
+    self.client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://api.pugapp.com"]];
+    
+    SRKRequest * req22 =  [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST 11");
+        
+    }]];
+    
+    for (int a= 0; a<12; a++) {
+        
+    }
+   SRKRequest * req =  [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/12" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST 22");
+        
+    }]];
+
+    [ self.client makeRequest:[SRKRequest GETRequest:@"search/3" urlParams:@{@"lat":@(0),
+                                                                             @"lon":@(0),
+                                                                             @"name":@"alex",
+                                                                             @"skip":@""} mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE MATCH 33");
+        
+    }]];
     
     
     
- 
-    TestObject * t = [TestObject objectWithType:@"sss" andData:@{}];
-    t.k = @"asda";
-    t[@"k"] = @"asd";
-     t.d = @"asda2";
-    self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
+    for (int a= 0; a<12; a++) {
+        SRKRequest * req22ss =  [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/10" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+            
+            NSLog(@"TEMP REQUEST %d",a);
+            
+        }]];
+    }
+    
+//    [self lala];
+//    TestObject * t = [TestObject objectWithType:@"sss" andData:@{}];
+//    t.k = @"asda";
+//    t[@"k"] = @"asd";
+//     t.d = @"asda2";
+//    self.client  = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://jsonplaceholder.typicode.com"]];
 //        SRKMappingScope * scope = [[SRKMappingScope alloc] initWithFile:@"gm_v2_mapping"];
 //    SRKMappingRelation * r;
 //
@@ -153,7 +228,7 @@
 //    
 //    m = [scope getObjectMappings:@"comments/following"];
     
-    [self request3];
+//    [self request3];
     
 //    [self codeForReadMe];
     

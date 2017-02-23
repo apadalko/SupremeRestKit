@@ -11,6 +11,8 @@
 #import "SRKMultipart.h"
 NS_ASSUME_NONNULL_BEGIN
 typedef void (^SRKResponseBlock) (SRKResponse  * response);
+typedef BOOL (^SRKRequestDependencyRuleBlock) (SRKResponse  * response);
+
 typedef NS_ENUM(NSInteger,SRKRequestMethod){
     
     SRKRequestMethodGET,
@@ -20,6 +22,13 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
     SRKRequestMethodDELETE,
     SRKRequestMethodPATCH,
     
+};
+
+typedef NS_ENUM(NSInteger,SRKRequestDependencyRule){
+    
+    SRKRequestDependencyRuleOnSuccess,
+    SRKRequestDependencyRuleOnError,
+    SRKRequestDependencyRuleAlways,
 };
 
 @interface SRKRequest : NSObject
@@ -50,4 +59,20 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
 -(nullable NSArray*)multiparts;
 
 @end
+
+@interface SRKRequest (Dependencies)
+
+-(instancetype)requestAfter:(SRKRequest*)request;
+-(instancetype)requestAfter:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
+-(instancetype)requestAfter:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
+
+
+-(SRKRequest*)then:(SRKRequest*)request;
+-(SRKRequest*)then:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
+-(SRKRequest*)then:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
+
+
+
+@end
+
 NS_ASSUME_NONNULL_END

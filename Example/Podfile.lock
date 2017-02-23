@@ -15,7 +15,7 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Expecta (1.0.5)
-  - Expecta+Snapshots (3.0.1):
+  - Expecta+Snapshots (3.1.0):
     - Expecta (~> 1.0)
     - FBSnapshotTestCase/Core (~> 2.0)
     - Specta (~> 1.0)
@@ -42,7 +42,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
-  Expecta+Snapshots: aee0487f8bbb9df7e0b7735380565ac06207e959
+  Expecta+Snapshots: 9975fe0307199d37371e6b77de35ef7079e7616a
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
   SupremeRestKit: 76222e225618b6166af91d9d23e359fbd341c22e

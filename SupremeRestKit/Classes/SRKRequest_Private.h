@@ -21,3 +21,7 @@
 
 -(NSMutableURLRequest *)generateRequestWithBaseURL:(NSURL*)baseUrl serializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error;
 @end
+
+@interface SRKRequestDependency : NSObject
+
+@end

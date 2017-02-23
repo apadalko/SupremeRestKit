@@ -125,7 +125,7 @@
         NSString * paramsString =  AFQueryStringFromParameters(self.urlParams);
 
         if (paramsString.length>0) {
-                    finalUrlString =[NSString stringWithFormat:@"%@%@%@",finalUrlString,url.query ? @"&%@" : @"?%@", paramsString];
+                    finalUrlString =[NSString stringWithFormat:@"%@%@%@",finalUrlString,url.query ? @"&" : @"?", paramsString];
         }
 
     }
