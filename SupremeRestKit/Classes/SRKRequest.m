@@ -158,3 +158,18 @@
     return __multiparts;
 }
 @end
+
+
+@implementation  SRKRequest (Dependencies)
+
+-(SRKRequest *)then:(SRKRequest *)request{
+    return [request requestAfter:self];
+}
+-(SRKRequest *)then:(SRKRequest *)request when:(SRKRequestDependencyRule)rule{
+    return [request requestAfter:self when:rule];
+}
+-(SRKRequest *)then:(SRKRequest *)request whenBlock:(BOOL (^)(SRKResponse * _Nonnull))ruleBlock{
+    return [request requestAfter:self whenBlock:ruleBlock];
+}
+
+@end

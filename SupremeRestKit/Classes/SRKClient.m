@@ -156,7 +156,7 @@
     
 }
 
--(NSOperation*)_operationFromRequest:(SRKRequest*)request{
+-(SRKRequestOperation*)_operationFromRequest:(SRKRequest*)request{
     
     NSError *serializationError = nil;
     NSMutableURLRequest * urlRequest = [request generateRequestWithBaseURL:self.sessionManager.baseURL serializer:[self.sessionManager requestSerializer] error:&serializationError];
