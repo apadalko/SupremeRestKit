@@ -62,7 +62,7 @@
     NSArray * workingDepedencies = [[NSArray alloc] initWithArray:self.dependencies];
     for (SRKRequestOperation * dependedOperation in workingDepedencies) {
         
-        NSLog(@"aaaa");
+//        NSLog(@"aaaa");
         
     }
     

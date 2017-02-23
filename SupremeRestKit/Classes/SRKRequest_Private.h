@@ -7,7 +7,7 @@
 //
 #import "SRKRequest.h"
 #import <AFNetworking/AFNetworking.h>
-
+@class SRKRequestDependency;
 @interface SRKRequest ()
 
 
@@ -20,8 +20,18 @@
 -(NSString*)HTTPMethod;
 
 -(NSMutableURLRequest *)generateRequestWithBaseURL:(NSURL*)baseUrl serializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)serializer error:(NSError *__autoreleasing *)error;
+
+-(NSArray<SRKRequestDependency*>*)afterRequestsDependencies;
+-(NSArray<SRKRequest*>*)beforeRequests;
+@end
+
+@interface SRKRequest (DependecyFinder)
+-(SRKRequest*)rootRequest;
+-(NSInteger)compareToRequest:(SRKRequest*)request;
 @end
 
 @interface SRKRequestDependency : NSObject
-
+@property(nonatomic,retain)SRKRequest * request;
+@property (nonatomic)SRKRequestDependencyRule rule;
+@property (nonatomic,copy)SRKRequestDependencyRuleBlock ruleBlock;
 @end

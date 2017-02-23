@@ -12,8 +12,8 @@
 @interface SRKRequest ()
 
 @property (nonatomic,retain)NSMutableArray * _multiparts;
-
-
+@property (nonatomic,retain)NSMutableArray <SRKRequestDependency*> * _afterRequestsDependencies;
+@property (nonatomic,retain)NSMutableArray <SRKRequest*> * _beforeRequests;
 @end
 @implementation SRKRequest
 
@@ -145,10 +145,29 @@
     
 }
 
+-(NSArray<SRKRequestDependency *> *)afterRequestsDependencies{
+    return __afterRequestsDependencies;
+}
+-(NSArray<SRKRequest *> *)beforeRequests{
+    return __beforeRequests;
+}
 
 #pragma mark - lazy init
 -(NSArray *)multiparts{
     return __multiparts;
+}
+
+-(NSMutableArray<SRKRequest *> *)_beforeRequests{
+    if (!__beforeRequests) {
+        __beforeRequests = [[NSMutableArray alloc] init];
+    }
+    return __beforeRequests;
+}
+-(NSMutableArray *)_afterRequests{
+    if (!__afterRequestsDependencies) {
+        __afterRequestsDependencies=[[NSMutableArray alloc] init];
+    }
+    return __afterRequestsDependencies;
 }
 
 -(NSMutableArray *)_multiparts{
@@ -159,17 +178,49 @@
 }
 @end
 
+@implementation SRKRequestDependency
+
+
+
+@end
 
 @implementation  SRKRequest (Dependencies)
 
 -(SRKRequest *)then:(SRKRequest *)request{
-    return [request requestAfter:self];
+    return [request after:self];
 }
 -(SRKRequest *)then:(SRKRequest *)request when:(SRKRequestDependencyRule)rule{
-    return [request requestAfter:self when:rule];
+    return [request after:self when:rule];
 }
 -(SRKRequest *)then:(SRKRequest *)request whenBlock:(BOOL (^)(SRKResponse * _Nonnull))ruleBlock{
-    return [request requestAfter:self whenBlock:ruleBlock];
+    return [request after:self whenBlock:ruleBlock];
 }
 
+-(instancetype)after:(SRKRequest *)request{
+    
+    return [self after:request when:SRKRequestDependencyRuleOnSuccess];
+}
+-(instancetype)after:(SRKRequest *)request when:(SRKRequestDependencyRule)rule{
+    
+    SRKRequestDependency * d = [[SRKRequestDependency alloc] init];
+    d.rule=rule;
+    d.request=request;
+    
+    if (![[request _beforeRequests]containsObject:self]) {
+        [[request _beforeRequests] addObject:self];
+
+    }
+    [[self _afterRequests] addObject:d];
+    
+    return self;
+}
+@end
+
+
+
+@implementation SRKRequest (DependecyFinder)
+-(SRKRequest*)rootRequest{
+    
+    return  nil;
+}
 @end

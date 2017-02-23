@@ -173,7 +173,60 @@ static    NSTimer * ttt;
 //ttt = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(t) userInfo:nil repeats:YES];
 //    [ttt fire];
     
+    
+    
+    
+    
+    
+    
     self.client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://api.pugapp.com"]];
+    
+    
+    
+    SRKRequest * a = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST AAAA");
+        
+    }];
+    SRKRequest * b = [SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST BBBB");
+        
+    }];
+    SRKRequest * c = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST CCCC");
+        
+    }];
+    SRKRequest * d = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST DDDD");
+        
+    }];
+    SRKRequest * e = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST EEEE");
+        
+    }];
+    SRKRequest * f = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"DONE TEST FFFF");
+        
+    }];
+    
+//    [a after:b];
+//    [a after:c];
+    
+    
+    [b after:a when:SRKRequestDependencyRuleAlways];//returns b
+    [a after:c];
+    [a after:d];
+    [d after:e];
+    [d after:f];
+    //(c,(e,f)->d)->a->b
+    [self.client makeRequest:a];
+    return;
+    
     
     SRKRequest * req22 =  [ self.client makeRequest:[SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
         

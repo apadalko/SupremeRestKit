@@ -62,10 +62,9 @@ typedef NS_ENUM(NSInteger,SRKRequestDependencyRule){
 
 @interface SRKRequest (Dependencies)
 
--(instancetype)requestAfter:(SRKRequest*)request;
--(instancetype)requestAfter:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
--(instancetype)requestAfter:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
-
+-(instancetype)after:(SRKRequest*)request;
+-(instancetype)after:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
+-(instancetype)after:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
 
 -(SRKRequest*)then:(SRKRequest*)request;
 -(SRKRequest*)then:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
