@@ -30,8 +30,6 @@
 -(NSInteger)compareToRequest:(SRKRequest*)request;
 @end
 
-@interface SRKRequestDependency : NSObject
+@interface SRKRequestDependencyRule : SRKDependencyRule
 @property(nonatomic,retain)SRKRequest * request;
-@property (nonatomic)SRKRequestDependencyRule rule;
-@property (nonatomic,copy)SRKRequestDependencyRuleBlock ruleBlock;
 @end

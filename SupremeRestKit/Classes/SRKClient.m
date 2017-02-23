@@ -11,57 +11,8 @@
 #import <AFNetworking/AFNetworking.h>
 
 
-@interface _SRKNode : NSObject
-
-@property (nonatomic,retain)NSMutableArray * subnodes;
-@property (nonatomic,retain)_SRKNode * nextNode;
-
-@property (nonatomic,retain)NSMutableArray * requests;
-
-@end
-
-@implementation _SRKNode
-
--(NSMutableArray *)subnodes{
-    if (!_subnodes) {
-        _subnodes=[[NSMutableArray alloc] init];
-    }
-    return _subnodes;
-}
--(NSMutableArray *)requests{
-    if (!_requests) {
-        _requests=[[NSMutableArray alloc] init];
-    }
-    return _requests;
-}
-@end
 
 
-
-@interface _SRKNode2 : NSObject
-
-@property (nonatomic,retain)NSMutableArray * subnodes;
-@property (nonatomic,retain)NSMutableArray * requests;
-@property (nonatomic,retain)_SRKNode2 * leftNode;
-
-
-@end
-
-@implementation _SRKNode2
-
--(NSMutableArray *)subnodes{
-    if (!_subnodes) {
-        _subnodes=[[NSMutableArray alloc] init];
-    }
-    return _subnodes;
-}
--(NSMutableArray *)requests{
-    if (!_requests) {
-        _requests=[[NSMutableArray alloc] init];
-    }
-    return _requests;
-}
-@end
 
 @interface SRKClient ()
 
@@ -74,9 +25,9 @@
 @property (nonatomic,retain)dispatch_queue_t workQueue;
 @property (nonatomic,retain)NSMutableArray * pendingRequestQueue;
 
-
 @property (nonatomic,retain)NSOperationQueue * mainOperationQueue;
-@property (nonatomic,retain)NSOperationQueue * testOperationQueue;
+
+@property (nonatomic,retain)NSMutableDictionary * customOperationsQueues;
 
 
 @property (nonatomic,retain)NSURLSessionConfiguration * sessionConfig;
@@ -111,9 +62,8 @@
  
         self.mainOperationQueue = [[NSOperationQueue alloc] init];
         self.mainOperationQueue.maxConcurrentOperationCount = 10;
-        
-             self.testOperationQueue = [[NSOperationQueue alloc] init];
-        self.testOperationQueue.maxConcurrentOperationCount = 10;
+        self.customOperationsQueues = [[NSMutableDictionary alloc] init];
+
 
     }
     return self;
@@ -153,49 +103,17 @@
                 if (self.pendingRequestQueue.count>0) {
                     NSArray * tempArray = [[NSArray alloc] initWithArray:self.pendingRequestQueue];
                     [self.pendingRequestQueue removeAllObjects];
-                   NSArray * operations =  [self someName:tempArray];
+                    NSArray * operations =  [self someName:tempArray];
                     
                     for (SRKRequestOperation * op in operations) {
-                        [self.mainOperationQueue addOperation:op];
+                        if ([op customQueueName]) {
+                            [[self operationQueueByName:[op customQueueName]] addOperation:op];
+                        }else{
+                            [self.mainOperationQueue addOperation:op];   
+                        }
+                       
                     }
                     
-//                    
-//                    SRKRequest * req1 = [tempArray objectAtIndex:0];
-//                     SRKRequest * req2 = [tempArray objectAtIndex:1];
-//                    SRKRequest * req3 = [tempArray objectAtIndex:2];
-//                    
-//                    NSOperation * operation1 = [self _operationFromRequest:req1];
-//                         NSOperation * operation2 = [self _operationFromRequest:req2];
-//                    NSOperation * operation3 = [self _operationFromRequest:req3];
-//                    
-//                    [operation3 addDependency:operation1];
-//                    [operation1 addDependency:operation2];
-//                     [operation3 addDependency:operation2];
-//                    
-//                    [self.mainOperationQueue addOperation:operation1];
-//                    [self.mainOperationQueue addOperation:operation2];
-//                     [self.testOperationQueue addOperation:operation3];
-//                    
-//                    for (int a = 3 ; a < tempArray.count;a++){
-//                        SRKRequest * request = tempArray[a];
-//                        NSOperation * operation = [self _operationFromRequest:request];
-//                        if (operation) {
-//                            [self.mainOperationQueue addOperation:operation];
-//                            
-//                        }
-//
-//                    }
-                    
-                    //                for (SRKRequest * request in tempArray){
-                    //
-                    //
-//                                        NSOperation * operation = [self _operationFromRequest:request];
-//                                        if (operation) {
-//                                            [self.mainOperationQueue addOperation:operation];
-//                    
-//                                        }
-                    //
-                    //                }
                 }
                 
 
@@ -218,45 +136,18 @@
     NSMutableArray * result = [[NSMutableArray alloc] init];
 
     NSMutableSet * processedRequests = [[NSMutableSet alloc] init];
-//    NSMutableDictionary * sequenceRequests = [[NSMutableDictionary alloc] init];
-//    {
-//        req1,
-//        "groupname":[anchor,req1,req2,req3,req4];
-//        "group2":[anchor,req,"group3":[anchor,req,req2,req3]]
-//        req3
-//}
+
     
     NSMutableSet * allRequests = [[NSMutableSet alloc] init];
     NSMutableDictionary * processedOperations = [[NSMutableDictionary alloc] init];
     [self extractRequestsFromArray:requests result:&allRequests fromRequest:nil];
     
-    NSLog(@"???");
     
-    
-    _SRKNode2 * rootNode = nil;
+
     for (SRKRequest * request in allRequests) {
-        
         NSString * indif = [NSString stringWithFormat:@"%p",request];
-        
         SRKRequestOperation * op = [self _operationFromRequest:request];
-    
         [processedOperations setValue:op forKey:indif];
-        
-//        NSLog(@"%@",indif);
-        
-//        if (rootNode == nil) {
-//            rootNode = [[_SRKNode2 alloc] init];
-//            [rootNode.requests addObject:request];
-//        }else {
-//            
-//            //1 is equal
-//            //0 is less
-//            
-//          
-//        }
-        
-        
-        
     }
     for (SRKRequest * request in allRequests) {
     
@@ -266,11 +157,11 @@
             
             if (op) {
                 
-                for (SRKRequestDependency * dep in request.afterRequestsDependencies) {
+                for (SRKRequestDependencyRule * dep in request.afterRequestsDependencies) {
                     NSString * subIndif = [NSString stringWithFormat:@"%p",   dep.request];
                     SRKRequestOperation * subOp = [processedOperations valueForKey:subIndif];
                     if (subOp) {
-                        [op addDependency:subOp];
+                        [op addDependency:subOp withRule:dep];
                     }
                 }
                 
@@ -282,28 +173,11 @@
     return [processedOperations allValues];
     
     
-   _SRKNode * node =  [self name:&processedRequests  requests:requests];
-    
-    
-    
-    
-    NSLog(@"adasd");
-//    for (SRKRequest * req in requests) {
-//        
-//        if ([processedRequests containsObject:req]) {
-//            continue;
-//        }
-//        [processedRequests addObject:req];
-//        if (req.afterRequestsDependencies.count==0) {
-//            [independedRequests addObject:req];
-//        }
-//    }
-    
 }
 
 
 
-
+#pragma mark - extraction
 -(void)extractRequestsFromArray:(NSArray*)requests result:(NSMutableSet**)result fromRequest:(SRKRequest*)fromRequest{
     NSMutableSet * extractedArray = [[NSMutableSet alloc] init];
     for (SRKRequest * request in requests) {
@@ -320,7 +194,7 @@
         [self extractRequestsFromArray:request.beforeRequests result:result fromRequest:fromRequest];
     }
     
-    for (SRKRequestDependency * dep in request.afterRequestsDependencies) {
+    for (SRKRequestDependencyRule * dep in request.afterRequestsDependencies) {
         [self extractRequestsFromRequest:dep.request result:result fromRequest:request];
     }
     
@@ -328,117 +202,7 @@
     
 }
 
-
-
-//-(void)sequence:(NSMutableArray**)processingArray requests:(NSArray*)requests{
-//    
-//    
-//    for
-//    
-//}
-
-
-
-
-
-
-
--(_SRKNode*)name:(NSMutableSet **)processedRequests requests:(NSArray*)requests{
-    
-    _SRKNode * node = [[_SRKNode alloc] init];
-    for (SRKRequest * req in requests) {
-        
-        if ([*processedRequests containsObject:req]) {
-            continue;
-        }
-//        [*processedRequests addObject:req];
-      
-        if (req.afterRequestsDependencies.count>0) {
- 
-            NSArray * n =   [self name2:processedRequests fromReq:req];
-  
-//            [n.requests addObject:req];
-            if (n) {
-                [[node subnodes] addObjectsFromArray:n];
-
-            }
-//        [[node requests] addObject:req];
-        }else{
-            [[node requests] addObject:req];
-        }
-
-        
-//        if (req.beforeRequests.count>0) {
-//            
-//            _SRKNode * n = [self name:processedRequests requests:req.beforeRequests];
-//            
-//            if (n) {
-//                [[node subnodes] addObject:n];
-//                
-//            }
-//        }
-        
-    }
-    
-  return node.requests.count==0&&node.subnodes.count==0?nil:node;
-}
--(NSArray *)name2:(NSMutableSet **)processedRequests fromReq:(SRKRequest*)req{
-    
-    NSArray * requestsDependencies = req.afterRequestsDependencies;
-    NSMutableArray * result = [[NSMutableArray alloc] init];
-    _SRKNode * mainNode = [[_SRKNode alloc] init];
-//    [mainNode.requests addObject:req];
-//    [result addObject:mainNode];
-    for (SRKRequestDependency * reqDpendencie in requestsDependencies) {
-        
-        if ([*processedRequests containsObject:reqDpendencie.request]) {
-            continue;
-        }
-//        [*processedRequests addObject:reqDpendencie.request];
-        
-        if (reqDpendencie.request.afterRequestsDependencies.count>0) {
-            
-            
-            _SRKNode * aNode = [[_SRKNode alloc] init];
-            [aNode.requests addObject:req];
-            
-            NSArray * subNode = [self name2:processedRequests  fromReq:reqDpendencie.request];
-            _SRKNode * cNode =[[_SRKNode alloc] init];
-            [cNode.requests addObject:reqDpendencie.request];
-            [[cNode subnodes] addObject:aNode];
-            for (_SRKNode * sn in subNode) {
-                [[sn subnodes] addObject:cNode];
-            }
-            
-            [result addObjectsFromArray:subNode];
-//            if (node) {
-//                [node.subnodes addObject:node];
-//            }
-
-          
-        }else{
-             [mainNode.requests addObject:reqDpendencie.request];
-        }
-        
-        
-//        if (req.afterRequestsDependencies.count>0) {
-//            [self name:processedRequests result:result requests:req.afterRequestsDependencies];
-//        }
-//        
-//        
-//        if (req.afterRequestsDependencies.count==0) {
-//            
-//        }else{
-//            
-//        }
-    }
-
-    if (mainNode.requests.count>0) {
-        [result addObject:mainNode];
-    }
-    
-    return result;
-}
+#pragma mark - operation gen
 
 -(SRKRequestOperation*)_operationFromRequest:(SRKRequest*)request{
     
@@ -453,7 +217,9 @@
         
         SRKRequestOperation * operation = [SRKRequestOperation operationWithRequestTask:[SRKRequestTask taskWithRequest:urlRequest sessionManager:self.sessionManager] andMappingTask:[SRKMappingTask taskWithMapping:mapping scope:self.mappingScope] complitBlock:[request responseBlock]];
         
-        
+        if (request.queueName) {
+            [operation setCustomQueueName:request.queueName];
+        }
         
         return operation;
     }else{
@@ -465,6 +231,22 @@
         return  nil;
     }
 }
+
+#pragma mark - custom queue management 
+
+
+-(NSOperationQueue*)operationQueueByName:(NSString*)name{
+    
+    NSOperationQueue * op = [self.customOperationsQueues valueForKey:name];
+    if (!op) {
+        op = [[NSOperationQueue alloc] init];
+        op.maxConcurrentOperationCount = 1;
+        [self.customOperationsQueues setValue:op forKey:name];
+    }
+    
+    return op;
+}
+
 
 #pragma mark - set/get
 -(void)setMainQueueAsyncSize:(NSInteger)mainRequestQueueSize{

@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "SRKResponse.h"
 #import "SRKMultipart.h"
+#import "SRKDependencyRule.h"
 NS_ASSUME_NONNULL_BEGIN
 typedef void (^SRKResponseBlock) (SRKResponse  * response);
-typedef BOOL (^SRKRequestDependencyRuleBlock) (SRKResponse  * response);
 
 typedef NS_ENUM(NSInteger,SRKRequestMethod){
     
@@ -24,12 +24,7 @@ typedef NS_ENUM(NSInteger,SRKRequestMethod){
     
 };
 
-typedef NS_ENUM(NSInteger,SRKRequestDependencyRule){
-    
-    SRKRequestDependencyRuleOnSuccess,
-    SRKRequestDependencyRuleOnError,
-    SRKRequestDependencyRuleAlways,
-};
+
 
 @interface SRKRequest : NSObject
 
@@ -49,6 +44,7 @@ typedef NS_ENUM(NSInteger,SRKRequestDependencyRule){
 
 -(instancetype)addBodyParam:(NSString *)key value:(id)value;
 -(instancetype)addBodyFromDict:(NSDictionary *)dict;
+-(instancetype)inQueueWithName:(NSString*)queueName;
 
 
 @property (nonatomic,copy)SRKResponseBlock responseBlock;
@@ -58,16 +54,19 @@ typedef NS_ENUM(NSInteger,SRKRequestDependencyRule){
 -(instancetype)addMultipart:(SRKMultipart*)multipart;
 -(nullable NSArray*)multiparts;
 
+
+@property (nonatomic,retain)NSString * queueName;
+
 @end
 
 @interface SRKRequest (Dependencies)
 
 -(instancetype)after:(SRKRequest*)request;
--(instancetype)after:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
+-(instancetype)after:(SRKRequest*)request when:(SRKDependencyRuleType)rule;
 -(instancetype)after:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
 
 -(SRKRequest*)then:(SRKRequest*)request;
--(SRKRequest*)then:(SRKRequest*)request when:(SRKRequestDependencyRule)rule;
+-(SRKRequest*)then:(SRKRequest*)request when:(SRKDependencyRuleType)rule;
 -(SRKRequest*)then:(SRKRequest*)request whenBlock:( BOOL (^) (SRKResponse * response) )ruleBlock;
 
 

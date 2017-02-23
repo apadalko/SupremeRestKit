@@ -218,11 +218,11 @@ static    NSTimer * ttt;
 //    [a after:c];
     
     
-    [b after:a when:SRKRequestDependencyRuleAlways];//returns b
-    [a after:c];
-    [a after:d];
-    [d after:e];
-    [d after:f];
+    [b after:a];//returns b
+    [a after:c when:SRKDependencyRuleTypeAlways];
+    [a after:[d inQueueWithName:@"test"] when:SRKDependencyRuleTypeAlways];
+    [d after:e when:SRKDependencyRuleTypeAlways];
+    [d after:f when:SRKDependencyRuleTypeAlways];
     //(c,(e,f)->d)->a->b
     [self.client makeRequest:a];
     return;

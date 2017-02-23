@@ -77,7 +77,10 @@
 }
 
 
-
+-(instancetype)inQueueWithName:(NSString *)queueName{
+    self.queueName = queueName;
+    return self;
+}
 
 #pragma mark - private
 
@@ -178,7 +181,7 @@
 }
 @end
 
-@implementation SRKRequestDependency
+@implementation SRKRequestDependencyRule
 
 
 
@@ -189,7 +192,7 @@
 -(SRKRequest *)then:(SRKRequest *)request{
     return [request after:self];
 }
--(SRKRequest *)then:(SRKRequest *)request when:(SRKRequestDependencyRule)rule{
+-(SRKRequest *)then:(SRKRequest *)request when:(SRKDependencyRuleType)rule{
     return [request after:self when:rule];
 }
 -(SRKRequest *)then:(SRKRequest *)request whenBlock:(BOOL (^)(SRKResponse * _Nonnull))ruleBlock{
@@ -198,11 +201,11 @@
 
 -(instancetype)after:(SRKRequest *)request{
     
-    return [self after:request when:SRKRequestDependencyRuleOnSuccess];
+    return [self after:request when:SRKDependencyRuleTypeOnSuccess];
 }
--(instancetype)after:(SRKRequest *)request when:(SRKRequestDependencyRule)rule{
+-(instancetype)after:(SRKRequest *)request when:(SRKDependencyRuleType)rule{
     
-    SRKRequestDependency * d = [[SRKRequestDependency alloc] init];
+    SRKRequestDependencyRule * d = [[SRKRequestDependencyRule alloc] init];
     d.rule=rule;
     d.request=request;
     

@@ -14,6 +14,7 @@
 @property (nonatomic, getter = isFinished, readwrite)  BOOL finished;
 @property (nonatomic, getter = isExecuting, readwrite) BOOL executing;
 
+@property (nonatomic,retain)NSMutableDictionary * rules;
 @end
 
 @implementation SRKRequestOperation
@@ -37,6 +38,7 @@
 -(instancetype)initWithRequestTask:(SRKRequestTask *)requestTask andMappingTask:(SRKMappingTask *)mappingTask complitBlock:(void (^)(SRKResponse *))completionBlock{
 
     if (self=[super init]) {
+        _rules=[[NSMutableDictionary alloc] init];
         _finished  = NO;
         _executing = NO;
         _requestTask = requestTask;
@@ -57,14 +59,65 @@
     [self main];
 }
 
+-(void)addDependency:(NSOperation *)op withRule:(SRKDependencyRule *)rule{
+    
+    NSString * indif = [NSString stringWithFormat:@"%p",op];
+    [self.rules setValue:rule forKey:indif];
+    
+    [self addDependency:op];
+}
+
 -(void)main{
     
     NSArray * workingDepedencies = [[NSArray alloc] initWithArray:self.dependencies];
+    
+    BOOL shouldContinue = YES;
+    
     for (SRKRequestOperation * dependedOperation in workingDepedencies) {
+        NSString * indif = [NSString stringWithFormat:@"%p",dependedOperation];
+        
+        SRKDependencyRule * rule = [self.rules valueForKey:indif];
+        if (rule) {
+            if (rule.ruleBlock) {
+                shouldContinue = rule.ruleBlock(dependedOperation.result);
+            }else {
+                
+                switch (rule.rule) {
+                    case SRKDependencyRuleTypeAlways:
+                        
+                        break;
+                    case SRKDependencyRuleTypeOnError:
+                        if (dependedOperation.state != SRKOperationStateFailed) {
+                            shouldContinue=NO;
+                        }
+                        
+                    case SRKDependencyRuleTypeOnSuccess:
+                        if (dependedOperation.state != SRKOperationStateFinished) {
+                            shouldContinue=NO;
+                        }
+                    default:
+                        break;
+                }
+                
+            }
+            
+        
+        }
+        if (!shouldContinue) {
+            break;
+        }
         
 //        NSLog(@"aaaa");
         
     }
+    
+    if (!shouldContinue) {
+        self.executing = YES;
+          self.completionBlock=nil;
+        self.finished = YES;
+        return;
+    }
+    
     
         self.executing = YES;
     if (self.requestTask) {
@@ -76,6 +129,7 @@
 }
 
 
+
 -(void)processAsRequestFirst{
     _state = SRKOperationStateMakingRequest;
     [self.requestTask start:^( id  _Nullable responseObject, NSError * _Nullable error) {
@@ -84,6 +138,7 @@
             SRKResponse * response =   [[SRKResponse alloc] init];
             response.error = error;
             response.success = NO;
+                    _result =response;
             _state = SRKOperationStateFailed;
             self.completionBlock(response);
             self.completionBlock=nil;
@@ -102,6 +157,7 @@
         response.rawData = data;
         response.success = YES;
         response.objects = objects;
+        _result =response;
          _state = SRKOperationStateFinished;
         self.completionBlock(response);
         self.completionBlock=nil;

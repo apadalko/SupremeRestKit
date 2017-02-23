@@ -10,6 +10,7 @@
 #import "SRKMappingTask.h"
 #import "SRKRequestTask.h"
 #import "SRKResponse.h"
+#import "SRKDependencyRule.h"
 NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger,SRKOperationState)  {
     SRKOperationStateNone,
@@ -33,5 +34,13 @@ typedef void (^SRKRequestOperationComplitBlock) (SRKResponse* response);
 @property (nonatomic, strong, readonly, nullable) SRKRequestTask * requestTask;
 @property (nonatomic,readonly)SRKOperationState state;
 @property (nonatomic,copy)SRKRequestOperationComplitBlock completionBlock;
+@property (nonatomic,retain,readonly)SRKResponse * result;
+
+@property (nonatomic,retain)NSString * customQueueName;
+
+
+-(void)addDependency:(NSOperation *)op withRule:(SRKDependencyRule*)rule;
+
+
 @end
 NS_ASSUME_NONNULL_END
