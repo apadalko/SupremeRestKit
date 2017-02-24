@@ -24,7 +24,7 @@ You have json model like this :
     "title": "title for article 2"
 }
 ```
-You parsed it in this array [Article1,Article2] and forward somewhere in your App , for ex , in Table View.
+You parsed it in this array: [Article1,Article2]. Then, move forward this array somewhere in your App , for example , in Table View.
 Very common - is that on cell selection you will push to a new View Controller and load more detailed object for article with Id = 1 : 
 ```json
 {
@@ -37,7 +37,7 @@ Very common - is that on cell selection you will push to a new View Controller a
     }
 }
 ```
-So you will parse it as another article object . But unfortunately it will be another Article object instance . SupremeRestKit solve this problem:
+So you will parse it as another article object. But unfortunately it will be another Article object instance . SupremeRestKit solve this problem:
 ```objc
 SRKClient * client = [[SRKClient alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.awesomeapp.com/v1"]];
 [client makeRequest:
