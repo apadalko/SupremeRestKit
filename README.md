@@ -12,7 +12,7 @@
 
 ## "Why I should use this?"
 
-probably, have model like this :
+You have json model like this :
 
 ```json
 {
@@ -24,9 +24,8 @@ probably, have model like this :
     "title": "title for article 2"
 }
 ```
-You successfully parsed it and get this array [Article1,Article2] . 
-Then move this array forward somewhere in your App , for ex , in Table View.
-Very common - is that on  cell selection you will move to a new View Controller and load more detailed object for article with Id = 1 : 
+You parsed it in this array [Article1,Article2] and forward somewhere in your App , for ex , in Table View.
+Very common - is that on cell selection you will push to a new View Controller and load more detailed object for article with Id = 1 : 
 ```json
 {
     "id":1,

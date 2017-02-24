@@ -183,12 +183,12 @@ static    NSTimer * ttt;
     
     
     
-    SRKRequest * a = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+    SRKRequest * a = [SRKRequest GETRequest:@"admin/test/5" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
         
         NSLog(@"DONE TEST AAAA");
         
     }];
-    SRKRequest * b = [SRKRequest GETRequest:@"admin/test/2" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+    SRKRequest * b = [SRKRequest GETRequest:@"admin/test/1" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
         
         NSLog(@"DONE TEST BBBB");
         
@@ -218,13 +218,21 @@ static    NSTimer * ttt;
 //    [a after:c];
     
     
-    [b after:a];//returns b
-    [a after:c when:SRKDependencyRuleTypeAlways];
-    [a after:[d inQueueWithName:@"test"] when:SRKDependencyRuleTypeAlways];
-    [d after:e when:SRKDependencyRuleTypeAlways];
-    [d after:f when:SRKDependencyRuleTypeAlways];
+//    [b after:a];//returns b
+//    [a after:c when:SRKDependencyRuleTypeAlways];
+//    [a after:[d inQueueWithName:@"test"] when:SRKDependencyRuleTypeAlways];
+//    [d after:e when:SRKDependencyRuleTypeAlways];
+//    [d after:f when:SRKDependencyRuleTypeAlways];
     //(c,(e,f)->d)->a->b
-    [self.client makeRequest:a];
+    [self.client makeRequest:[a inQueueWithName:@"test"]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        sleep(1);
+    
+        dispatch_async(dispatch_get_main_queue(),^{
+            [self.client makeRequest:[b inQueueWithName:@"test"]];
+        });
+        
+    });
     return;
     
     
