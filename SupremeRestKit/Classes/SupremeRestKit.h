@@ -6,8 +6,12 @@
 //
 //
 
-#ifndef SupremeRestKit_h
-#define SupremeRestKit_h
-
-
-#endif /* SupremeRestKit_h */
+#import <SupremeRestKit/SRKClient.h>
+#import <SupremeRestKit/SRKRequest.h>
+#import <SupremeRestKit/SRKManager.h>
+#import <SupremeRestKit/SRKMultipart.h>
+#import <SupremeRestKit/SRKResponse.h>
+#import <SupremeRestKit/SRKObject.h>
+#import <SupremeRestKit/SRKObjectMapping.h>
+#import <SupremeRestKit/SRKMappingRelation.h>
+#import <SupremeRestKit/SRKMappingScope.h>

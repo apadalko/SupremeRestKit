@@ -25,7 +25,8 @@
 		B8C99CBA1E5FE8FB000C8214 /* SRKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CB71E5FE8FB000C8214 /* SRKViewController.m */; };
 		B8C99CBB1E5FE8FB000C8214 /* SimpleViewControllerSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */; };
 		B8C99CC01E5FE93E000C8214 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CBF1E5FE93E000C8214 /* MainViewController.m */; };
-		B8C99CC31E5FEF33000C8214 /* SimpleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */; };
+		B8C99EC41E61F49B000C8214 /* SimpleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99EC31E61F49B000C8214 /* SimpleViewController.m */; };
+		B8C99EC71E61F91A000C8214 /* SimpleDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99EC61E61F91A000C8214 /* SimpleDetailsViewController.m */; };
 		B8E43A391E5562A700C4CF01 /* gm_v2_mapping.json in Resources */ = {isa = PBXBuildFile; fileRef = B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */; };
 /* End PBXBuildFile section */
 
@@ -69,8 +70,10 @@
 		B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleViewControllerSwift.swift; sourceTree = "<group>"; };
 		B8C99CBE1E5FE93E000C8214 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		B8C99CBF1E5FE93E000C8214 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		B8C99CC11E5FEF33000C8214 /* SimpleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleViewController.h; sourceTree = "<group>"; };
-		B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleViewController.m; sourceTree = "<group>"; };
+		B8C99EC21E61F49B000C8214 /* SimpleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleViewController.h; sourceTree = "<group>"; };
+		B8C99EC31E61F49B000C8214 /* SimpleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleViewController.m; sourceTree = "<group>"; };
+		B8C99EC51E61F91A000C8214 /* SimpleDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleDetailsViewController.h; sourceTree = "<group>"; };
+		B8C99EC61E61F91A000C8214 /* SimpleDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleDetailsViewController.m; sourceTree = "<group>"; };
 		B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gm_v2_mapping.json; sourceTree = "<group>"; };
 		DF476058AB1753B519DBAF01 /* Pods-SupremeRestKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Tests/Pods-SupremeRestKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ED003360E9AD9348A9F6B597 /* Pods-SupremeRestKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Example/Pods-SupremeRestKit_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -200,10 +203,9 @@
 		B8C99CB51E5FE8FB000C8214 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				B8C99EC11E61F49B000C8214 /* simple */,
 				B8C99CB61E5FE8FB000C8214 /* SRKViewController.h */,
 				B8C99CB71E5FE8FB000C8214 /* SRKViewController.m */,
-				B8C99CC11E5FEF33000C8214 /* SimpleViewController.h */,
-				B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */,
 			);
 			path = ObjC;
 			sourceTree = "<group>";
@@ -214,6 +216,17 @@
 				B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */,
 			);
 			path = Swift;
+			sourceTree = "<group>";
+		};
+		B8C99EC11E61F49B000C8214 /* simple */ = {
+			isa = PBXGroup;
+			children = (
+				B8C99EC21E61F49B000C8214 /* SimpleViewController.h */,
+				B8C99EC31E61F49B000C8214 /* SimpleViewController.m */,
+				B8C99EC51E61F91A000C8214 /* SimpleDetailsViewController.h */,
+				B8C99EC61E61F91A000C8214 /* SimpleDetailsViewController.m */,
+			);
+			path = simple;
 			sourceTree = "<group>";
 		};
 		F832A3886404F4CD2FB12C3B /* Pods */ = {
@@ -430,9 +443,10 @@
 			files = (
 				B8C99CBB1E5FE8FB000C8214 /* SimpleViewControllerSwift.swift in Sources */,
 				6003F59E195388D20070C39A /* SRKAppDelegate.m in Sources */,
+				B8C99EC71E61F91A000C8214 /* SimpleDetailsViewController.m in Sources */,
 				B8C99CBA1E5FE8FB000C8214 /* SRKViewController.m in Sources */,
 				B8C99CC01E5FE93E000C8214 /* MainViewController.m in Sources */,
-				B8C99CC31E5FEF33000C8214 /* SimpleViewController.m in Sources */,
+				B8C99EC41E61F49B000C8214 /* SimpleViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

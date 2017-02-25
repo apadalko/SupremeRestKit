@@ -7,22 +7,33 @@
 //
 
 #import "SRKAppDelegate.h"
-
+#import <SupremeRestKit/SupremeRestKit.h>
 
 
 
 #import "SupremeRestKit_Example-Swift.h"
+
+#import "SimpleViewController.h"
 
 @implementation SRKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    ///
+    
+    [[SRKManager shared] registerClient:[[SRKClient alloc] initWithBaseURL:
+                                         [NSURL URLWithString:@"http://jsonplaceholder.typicode.com/"]]
+                               withName:@"simple"];
+    
+    
+    ////
+    
     self.window=[[UIWindow alloc] init];
     [self.window makeKeyAndVisible];
     [self.window setFrame:[[UIScreen mainScreen] bounds]];
     [self.window setBackgroundColor:[UIColor whiteColor]];
-    self.window.rootViewController=[[SimpleViewControllerSwift alloc] init];
+    self.window.rootViewController=[[UINavigationController alloc] initWithRootViewController:[[SimpleViewController alloc] init]];
     // Override point for customization after application launch.
     return YES;
 }
