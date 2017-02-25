@@ -11,13 +11,18 @@
 
 
 
+#import "SupremeRestKit_Example-Swift.h"
 
 @implementation SRKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-
+    self.window=[[UIWindow alloc] init];
+    [self.window makeKeyAndVisible];
+    [self.window setFrame:[[UIScreen mainScreen] bounds]];
+    [self.window setBackgroundColor:[UIColor whiteColor]];
+    self.window.rootViewController=[[SimpleViewControllerSwift alloc] init];
     // Override point for customization after application launch.
     return YES;
 }

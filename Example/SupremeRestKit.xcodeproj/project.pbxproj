@@ -14,7 +14,6 @@
 		6003F598195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F596195388D20070C39A /* InfoPlist.strings */; };
 		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F59E195388D20070C39A /* SRKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* SRKAppDelegate.m */; };
-		6003F5A7195388D20070C39A /* SRKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* SRKViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -23,7 +22,10 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		7984B5ABEEBEDEACA1F2F751 /* Pods_SupremeRestKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE79966EEBB6CCCA60AD033 /* Pods_SupremeRestKit_Tests.framework */; };
-		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		B8C99CBA1E5FE8FB000C8214 /* SRKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CB71E5FE8FB000C8214 /* SRKViewController.m */; };
+		B8C99CBB1E5FE8FB000C8214 /* SimpleViewControllerSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */; };
+		B8C99CC01E5FE93E000C8214 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CBF1E5FE93E000C8214 /* MainViewController.m */; };
+		B8C99CC31E5FEF33000C8214 /* SimpleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */; };
 		B8E43A391E5562A700C4CF01 /* gm_v2_mapping.json in Resources */ = {isa = PBXBuildFile; fileRef = B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */; };
 /* End PBXBuildFile section */
 
@@ -50,8 +52,6 @@
 		6003F59B195388D20070C39A /* SupremeRestKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SupremeRestKit-Prefix.pch"; sourceTree = "<group>"; };
 		6003F59C195388D20070C39A /* SRKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRKAppDelegate.h; sourceTree = "<group>"; };
 		6003F59D195388D20070C39A /* SRKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRKAppDelegate.m; sourceTree = "<group>"; };
-		6003F5A5195388D20070C39A /* SRKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRKViewController.h; sourceTree = "<group>"; };
-		6003F5A6195388D20070C39A /* SRKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SRKViewController.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* SupremeRestKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SupremeRestKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -61,9 +61,16 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7FE79966EEBB6CCCA60AD033 /* Pods_SupremeRestKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SupremeRestKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		99FA5DD51D12EC5E1A5EFDAB /* Pods-SupremeRestKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Example/Pods-SupremeRestKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B0F7D047A1BA76C382E2CD93 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		B8C99CB11E5FE4F0000C8214 /* SupremeRestKit_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SupremeRestKit_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		B8C99CB61E5FE8FB000C8214 /* SRKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKViewController.h; sourceTree = "<group>"; };
+		B8C99CB71E5FE8FB000C8214 /* SRKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKViewController.m; sourceTree = "<group>"; };
+		B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleViewControllerSwift.swift; sourceTree = "<group>"; };
+		B8C99CBE1E5FE93E000C8214 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		B8C99CBF1E5FE93E000C8214 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		B8C99CC11E5FEF33000C8214 /* SimpleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleViewController.h; sourceTree = "<group>"; };
+		B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleViewController.m; sourceTree = "<group>"; };
 		B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gm_v2_mapping.json; sourceTree = "<group>"; };
 		DF476058AB1753B519DBAF01 /* Pods-SupremeRestKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Tests/Pods-SupremeRestKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		ED003360E9AD9348A9F6B597 /* Pods-SupremeRestKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SupremeRestKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SupremeRestKit_Example/Pods-SupremeRestKit_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,15 +141,17 @@
 		6003F593195388D20070C39A /* Example for SupremeRestKit */ = {
 			isa = PBXGroup;
 			children = (
+				B8C99CB51E5FE8FB000C8214 /* ObjC */,
+				B8C99CB81E5FE8FB000C8214 /* Swift */,
 				B8E43A381E5562A700C4CF01 /* gm_v2_mapping.json */,
+				B8C99CBE1E5FE93E000C8214 /* MainViewController.h */,
+				B8C99CBF1E5FE93E000C8214 /* MainViewController.m */,
 				6003F59C195388D20070C39A /* SRKAppDelegate.h */,
 				6003F59D195388D20070C39A /* SRKAppDelegate.m */,
-				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
-				6003F5A5195388D20070C39A /* SRKViewController.h */,
-				6003F5A6195388D20070C39A /* SRKViewController.m */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				B8C99CB11E5FE4F0000C8214 /* SupremeRestKit_Example-Bridging-Header.h */,
 			);
 			name = "Example for SupremeRestKit";
 			path = SupremeRestKit;
@@ -186,6 +195,25 @@
 				B0F7D047A1BA76C382E2CD93 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		B8C99CB51E5FE8FB000C8214 /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				B8C99CB61E5FE8FB000C8214 /* SRKViewController.h */,
+				B8C99CB71E5FE8FB000C8214 /* SRKViewController.m */,
+				B8C99CC11E5FEF33000C8214 /* SimpleViewController.h */,
+				B8C99CC21E5FEF33000C8214 /* SimpleViewController.m */,
+			);
+			path = ObjC;
+			sourceTree = "<group>";
+		};
+		B8C99CB81E5FE8FB000C8214 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				B8C99CB91E5FE8FB000C8214 /* SimpleViewControllerSwift.swift */,
+			);
+			path = Swift;
 			sourceTree = "<group>";
 		};
 		F832A3886404F4CD2FB12C3B /* Pods */ = {
@@ -253,6 +281,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = apadalko;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						LastSwiftMigration = 0820;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -282,7 +313,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				B8E43A391E5562A700C4CF01 /* gm_v2_mapping.json in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
@@ -398,8 +428,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8C99CBB1E5FE8FB000C8214 /* SimpleViewControllerSwift.swift in Sources */,
 				6003F59E195388D20070C39A /* SRKAppDelegate.m in Sources */,
-				6003F5A7195388D20070C39A /* SRKViewController.m in Sources */,
+				B8C99CBA1E5FE8FB000C8214 /* SRKViewController.m in Sources */,
+				B8C99CC01E5FE93E000C8214 /* MainViewController.m in Sources */,
+				B8C99CC31E5FEF33000C8214 /* SimpleViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -528,12 +561,18 @@
 			baseConfigurationReference = 99FA5DD51D12EC5E1A5EFDAB /* Pods-SupremeRestKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SupremeRestKit/SupremeRestKit-Prefix.pch";
 				INFOPLIST_FILE = "SupremeRestKit/SupremeRestKit-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SupremeRestKit/SupremeRestKit_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -543,12 +582,17 @@
 			baseConfigurationReference = ED003360E9AD9348A9F6B597 /* Pods-SupremeRestKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SupremeRestKit/SupremeRestKit-Prefix.pch";
 				INFOPLIST_FILE = "SupremeRestKit/SupremeRestKit-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SupremeRestKit/SupremeRestKit_Example-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -557,6 +601,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 586D488DA05684A15B68ECD6 /* Pods-SupremeRestKit_Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -581,6 +626,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DF476058AB1753B519DBAF01 /* Pods-SupremeRestKit_Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
