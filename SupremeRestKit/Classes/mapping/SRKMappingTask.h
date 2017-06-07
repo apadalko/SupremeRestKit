@@ -28,5 +28,5 @@ typedef void (^SRKMappingTaskComplitBlock) (NSArray<SRKObject*> * result);
 
 -(void)startWithData:(NSDictionary*)data complitBlock:(void(^)(NSArray<SRKObject*>* objects))complitBlock;
 
-@property (nonatomic,retain)dispatch_queue_t workQueue;
+@property (nonatomic)dispatch_queue_t workQueue;
 @end
