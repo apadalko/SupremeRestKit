@@ -18,6 +18,9 @@
 @interface SimpleViewController ()
 @property (nonatomic,retain)NSArray * items;
 @property (nonatomic,weak) SRKClient * client;
+
+@property (nonatomic)NSInteger step;
+@property (nonatomic)NSInteger count;
 @property (nonatomic,retain) UITableView * resultsTableView;
 
 @end
@@ -33,6 +36,39 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    SRKClient * fluidClient = [[SRKManager shared] getClientWithName:@"fluid"];
+    
+    [[fluidClient requestSerialized] setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Content-Type"];
+    [[fluidClient requestSerialized] setValue:@"XMLHttpRequest" forHTTPHeaderField:@"X-Requested-With"];
+
+    [[fluidClient requestSerialized] setValue:@"ru" forHTTPHeaderField:@"Accept-Language"];
+
+    [[fluidClient requestSerialized] setValue:@"gzip, deflate" forHTTPHeaderField:@"Accept-Encoding"];
+
+    [[fluidClient requestSerialized] setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Content-Type"];
+
+       [[fluidClient requestSerialized] setValue:@"keep-alive" forHTTPHeaderField:@"Connection"];
+       [[fluidClient requestSerialized] setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Accept"];
+       [[fluidClient requestSerialized] setValue:@"Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Mobile/14A403" forHTTPHeaderField:@"User-Agent"];
+       [[fluidClient requestSerialized] setValue:@"b5a638e4-def8-4403-9555-c6f287b9e9dd" forHTTPHeaderField:@"X-Titanium-Id"];
+    
+    
+    self.count=0;
+    self.step=0;
+    [self makeRequest];
+
+//    [fluidClient makeRequest:[SRKRequest GETRequest:@"items/7267" urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+//        
+//        NSLog(@"%@",response);
+//        
+//        
+//    }]];
+    
+    return;
+    
+    
+    
+    
     [self generateTableView];
     
     [self.client makeRequest:[SRKRequest GETRequest:@"posts" urlParams:nil mapping:
@@ -47,6 +83,30 @@
                               }]];
     
     // Do any additional setup after loading the view.
+}
+
+-(void)makeRequest{
+    if (self.step>=100000) {
+                    NSLog(@"-------");
+                    NSLog(@"TOTAL COUNT: %ld",self.count);
+        return;
+    }
+    [[[SRKManager shared] getClientWithName:@"fluid"] makeRequest:[SRKRequest GETRequest:[NSString stringWithFormat:@"users/%ld",self.step] urlParams:nil mapping:nil andResponseBlock:^(SRKResponse * _Nonnull response) {
+        
+        NSLog(@"%@",response);
+        
+        if (response.success) {
+                 NSLog(@"SUCCESS");
+            self.count++;
+            NSLog(@"TOTAL COUNT: %ld",self.count);
+        
+        }else{
+            NSLog(@"FAIL");
+        }
+        self.step++;
+        [self makeRequest];
+        
+    }]];
 }
 
 -(void)viewDidLayoutSubviews{

@@ -20,6 +20,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    //
+    
+    [[SRKManager shared] registerClient:[[SRKClient alloc] initWithBaseURL:
+                                         [NSURL URLWithString:@"https://fluid-api-production.herokuapp.com"]]
+                               withName:@"fluid"];
+    
+
+    
     ///
     
     [[SRKManager shared] registerClient:[[SRKClient alloc] initWithBaseURL:

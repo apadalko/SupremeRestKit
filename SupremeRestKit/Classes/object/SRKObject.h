@@ -80,9 +80,15 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
 
 @end
 
+@interface SRKObject (Observing)
+
+//-(void)observeProperty:(NSString*)propertyName with
+@end
+
+
 
 /**
- usfull extension of SRKObject that allow to easy create a mapping for related object class
+ usefull extension of SRKObject that allow to easy create a mapping for related object class
  */
 @interface SRKObject (SRKMapping)
 

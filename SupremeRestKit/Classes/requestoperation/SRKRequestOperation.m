@@ -90,11 +90,13 @@
                         if (dependedOperation.state != SRKOperationStateFailed) {
                             shouldContinue=NO;
                         }
-                        
+                        break;
                     case SRKDependencyRuleTypeOnSuccess:
                         if (dependedOperation.state != SRKOperationStateFinished) {
                             shouldContinue=NO;
                         }
+                        break;
+
                     default:
                         break;
                 }

@@ -50,7 +50,7 @@
         self.sessionManager=[[AFHTTPSessionManager alloc] initWithBaseURL:url sessionConfiguration:self.sessionConfig];
         self.sessionManager.operationQueue.maxConcurrentOperationCount=100;
       
-        [self.sessionManager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html",@"*/*", nil]];
+        [self.sessionManager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json",@"text/html",@"*/*",@"application/vnd.api+json", nil]];
         AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
         
         [serializer setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
