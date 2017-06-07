@@ -12,7 +12,7 @@
 #import "SRKObject_Private.h"
 @interface SRKObjectMapper ()
 @property (nonatomic,retain)SRKMappingScope * scope;
-@property (nonatomic,retain)dispatch_queue_t workQueue;
+@property (nonatomic)dispatch_queue_t workQueue;
 
 @end
 @implementation SRKObjectMapper

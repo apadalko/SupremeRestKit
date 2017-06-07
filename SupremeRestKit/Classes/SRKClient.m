@@ -22,7 +22,7 @@
 
 
 
-@property (nonatomic,retain)dispatch_queue_t workQueue;
+@property (nonatomic)dispatch_queue_t workQueue;
 @property (nonatomic,retain)NSMutableArray * pendingRequestQueue;
 
 @property (nonatomic,retain)NSOperationQueue * mainOperationQueue;
