@@ -155,7 +155,7 @@ static SRKMappingScope * _defaultScope;
     
     if (!className&&!extends&&!identifierKeyPath&&!_properties&&!_relations) {
         
-        return (SRKObjectMapping*)dictionary;
+        return nil;//(SRKObjectMapping*)dictionary;
     }
     // creating copy of properties
     NSMutableDictionary * properties = [[NSMutableDictionary alloc] initWithDictionary:_properties];
