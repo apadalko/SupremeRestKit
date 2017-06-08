@@ -179,7 +179,7 @@
     if ([relation isKindOfClass:[SRKMappingRelation class]]){
         SRKMappingRelation * relationObject = relation;
         id subData = nil;
-        if ([relationObject fromKey ]) {
+        if ([relationObject fromKey ].length>0) {
             subData = [data valueForKeyPath:[relationObject fromKey]];
         }else {
             subData = data;
