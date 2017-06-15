@@ -57,7 +57,7 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
 ////
 +(void)clearRam;
 
-
+-(void)copyToObject:(SRKObject*)toObject override:(BOOL)override;
 @end
 
 

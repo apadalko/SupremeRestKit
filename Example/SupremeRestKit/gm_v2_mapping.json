@@ -1,0 +1,239 @@
+{
+  
+
+    "------------- AUTH REQUESTS ---------":"",
+    "auth/anonymous":{
+        "~extends":"auth_mapping"
+    },
+   
+  "auth/signin":{
+    "~extends":"auth_mapping"
+  },
+  "auth/facebook":{
+    "~extends":"auth_mapping"
+  },
+  "auth/signup":{
+    "~extends":"auth_mapping"
+  },
+
+
+  "------------comments--------------":"",
+
+
+  "------------- CURRENT USER REQUESTS ---------":"",
+
+  "me/profile":{
+    "~extends":"user"
+  },
+  "me/followers":{
+    "~extends":"user"
+  },
+  "me/followings":{
+    "~extends":"user"
+  },
+
+  "comments/subscribed":{
+    "~extends":"comment_post"
+  },
+
+  "me/settings/notifications":{
+    "~className":"GMRKNotificationSettings",
+    "~properties":{
+      "voteOnPost":"votePostNotificationState",
+      "voteOnReply":"voteReplyNotificationState",
+      "reply":"replyNotificationState",
+      "invite":"inviteNotificationState",
+        "alsoReply":"alsoReplyNotificationState",
+        "follow":"followNotificationState",
+        "followedActivity":"followedActivityNotificationState",
+        "mention":"mentionReplyNotificationState"
+        
+        
+        
+        
+    }
+  },
+  "------------- USERS requests ---------":"",
+
+    "explore/suggestions/followings":{
+        "~extends":"user_suggestion"
+    },
+    
+    "explore/followings":{
+         "~extends":"user"
+    },
+
+  "users/search":{
+    "~extends":"user"
+  },
+
+    "users/suggestions":{
+       "~extends":"user_suggestion"
+    },
+
+  "------------- comments requests ---------":"",
+
+  "comments":{
+    "~extends":"comment_post"
+  },
+  "comments/following":{
+    "~extends":"comment_post"
+  },
+
+  "------- validator --------":"",
+
+
+
+  "----------------------------------------------------":"",
+  "------------- basic objects ---------":"",
+
+
+  "auth_mapping":{
+    "~relations":{
+      "user->user":{
+        "~extends":"user"
+      }
+    },
+    "~properties":{
+      "token":"token"
+    }
+  },
+
+    
+    
+    
+  "------------- USER ---------":"",
+    
+  "user_suggestion":{
+      "~className":"GMRKFollowingSuggesetion",
+      "~relations":{
+          "user->user":{
+              "~extends":"user"
+          }
+      },
+      "~properties":{
+          "coverImageUrl":"coverImageUrl",
+          "featured":"featured",
+          "description":"userDescription"
+      }
+      
+  },
+  "user":{
+   "~className":"GMRKUser",
+    "~properties":{
+        "anonymous":"anonymous",
+      "email":"email",
+      "creationTime":"createdAt",
+      "fullName":"fullName",
+      "karma":"karma",
+      "username":"username",
+      "bio":"bio",
+      "objectId":"objectId",
+       "type":"type",
+      "profilePictureUrl":"profilePicture",
+      "profilePictureThumbUrl":"profilePictureThumb",
+      "gender":"gender",
+      "followersCount":"followersCount",
+      "followingsCount":"followingsCount",
+      "following":"followingState"
+    }
+  },
+    "-------------- PERSONA --------------------------":"",
+    
+    "persona":{
+        "~className":"GMRKUser",
+        "~extends":"user",
+        "~properties": {
+            
+            "metadata":"metadata",
+            "coverImage":"coverImage",
+            "displayText":"displayText"
+            
+        }
+    },
+
+  "------------- COMMENTS ---------":"",
+  "comment_post":{
+    "~className": "GMRKCommentPost",
+    "~extends":"comment",
+    "~properties":{
+      "repliesCount":"repliesCount",
+      "eventStart":"eventStartDate",
+      "eventEnd":"eventEndDate",
+      "subscribed":"subscribed",
+      "updateTime":"lastReplyDate",
+         "metadata":"metadata"
+    }
+  },
+  "comment_reply":{
+    "~className": "GMRKCommentReply",
+    "~extends":"comment",
+    "~properties":{
+      "parentId":"parentId"
+    }
+  },
+  "comment":{
+    "~properties":{
+      "pixelId":"pixelId",
+      "textContent":"textContent",
+      "creationTime":"createdAt",
+      "lat":"lat",
+      "lon":"lon",
+      "likesCount":"upvotes",
+      "disLikesCount":"downvotes",
+      "rating":"rating",
+      "visible":"visible",
+      "deleted":"deleted",
+      "voteState":"voteState",
+      "objectId":"objectId"
+    },
+    "~relations":{
+      "fromUser->fromUser":{
+        "~extends":"user"
+      },
+      "content->content":{
+        "~className":"GMMediaContent",
+        "~properties":{
+          "type":"type",
+          "mediaUrl":"mediaUrl"
+        }
+      }
+    }
+  },
+
+  "------------- ACTIVITY ---------":"",
+  "activity":{
+    "~className":"GMRKActivity",
+    "~properties":{
+      "type":"type",
+      "creationTime":"createdAt",
+      "objectId":"objectId"
+    },
+    "~relations":{
+      "fromUser->fromUser":{
+        "~extends":"user"
+      },
+      "toUser->toUser":{
+        "~extends":"user"
+      },
+      "?->type==1||->type==2||->type==6||->type==5||->type==7":{
+        "comment->toPost":{
+          "~extends":"comment_post"
+        }
+      },
+      "?->type==0||->type==3||->type==4||->type==11":{
+          "comment->toPost": {
+          "~className": "GMRKCommentPost",
+          "~properties": {
+            "parentId": "objectId"
+          }
+        },
+        "comment->toReply":{
+          "~extends":"comment_reply"
+        }
+      }
+    }
+  }
+
+
+}
